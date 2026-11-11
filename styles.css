@@ -29,3 +29,6 @@
 @media print{.response-section{padding:10px 0;background:white;color:black;break-inside:auto}
 .response-card{background:white;border:1px solid #777;break-inside:avoid}.response-detail{display:block}.response-step h4,.response-card h3{color:black}.response-summary,.response-list,.response-note,.response-stage span{color:black}
 .response-stages{display:none}.response-detail details{display:block}body.printing-guide .response-section{display:none}}
+
+/* Keep all five site navigation links accessible on narrow screens. */
+@media(max-width:730px){.main-nav{flex-wrap:wrap;justify-content:flex-start;column-gap:18px;row-gap:10px}}
