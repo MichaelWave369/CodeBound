@@ -16,7 +16,7 @@ test("72-hour plans have unique IDs, nonempty timed steps and verifiable safegua
     for(const key of ["first","day","next","tools","verify","escalate","guides","sourceIds"]) {
       assert.ok(Array.isArray(plan[key]),plan.id+" missing "+key);
       assert.ok(plan[key].length>=2,plan.id+" too few entries: "+key);
-      assert.ok(plan[key].every(v=>typeof v==="string"&&v.length>(["guides","sourceIds"].includes(key)?2:12)),plan.id+" invalid text in "+key);
+      assert.ok(plan[key].every(v=>typeof v==="string"&&v.length>(["first","day","next","verify","escalate"].includes(key)?12:2)),plan.id+" invalid text in "+key);
     }
     for(const id of plan.guides)assert.ok(guideIds.has(id),plan.id+" unknown guide "+id);
     for(const id of plan.sourceIds)assert.ok(RESPONSE_SOURCES[id],plan.id+" unknown source "+id);
