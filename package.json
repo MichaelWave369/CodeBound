@@ -1,0 +1,13 @@
+{
+  "name": "codebound",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Offline-first commons reconstruction atlas",
+  "scripts": {
+    "test": "node --test tests/*.test.js",
+    "dev": "node scripts/serve.mjs",
+    "check": "npm test"
+  },
+  "engines": {"node": ">=20"}
+}
