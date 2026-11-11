@@ -5,9 +5,10 @@
 
 **CodeBound** is a free, practical field library for neighbors, responders and makerspaces preparing for or recovering from infrastructure disruption. This is an open resilience project, **not a prediction of collapse**.
 
-## What's included in v0.2
+## What's included in v0.3
 
 - 16 foundational, structured system cards across water, sanitation, food, shelter, energy, communications, health, repair, education, and community.
+- **Six 72-hour response plans** for water disruption, power outages, unsafe food storage, communications loss, shelter displacement and voluntary neighborhood coordination. Each has timed checkpoints, acceptance tests, escalation warnings and source provenance.
 - Searchable, accessible, printable mobile-friendly web atlas with dependencies, materials, ordered steps, acceptance checks, cautions, and links to primary sources.
 - Two client-side tools: minimum emergency water planner and local-only inventory ledger with JSON export/import.
 - Offline-first PWA with a service worker; runtime has no third-party packages or required cloud API.
@@ -24,7 +25,7 @@
 | Access the interactive water calculator and shared-supply ledger | Website / local HTTP server | A modern browser with JavaScript, a local HTTP server and an HTML5-compatible device |
 | Integrate guides into other tools | **fieldbook.json** | A JSON parser |
 
-The portable HTML contains all guide text and inline styling. **External references are *links*, not bundled copies**, so source websites cannot be accessed without connectivity. Download authoritative documents separately and obey their licensing if archival use is necessary.
+The portable HTML contains all guide and response-plan text and inline styling. **External references are *links*, not bundled copies**, so source websites cannot be accessed without connectivity. Download authoritative documents separately and obey their licensing if archival use is necessary.
 
 ## Build locally
 
@@ -40,7 +41,7 @@ The local interactive site runs at `http://localhost:4173`. The portable output 
 
 To run the interactive version from the extracted ZIP entirely offline, open a terminal in its `site/` directory and run `node scripts/serve.mjs`, then visit `http://localhost:4173`. Node.js 20+ must already be installed. The server binds only to `127.0.0.1`, not to the LAN.
 
-**Reproducibility:** given the same sources and Node-compatible compression, the ZIP has fixed timestamps and sorted entries. The tests build twice, compare archive bytes, independently extract files, and validate every file's SHA-256 from its manifest.
+**Response-plan times:** The 0–2, 2–24 and 24–72 hour windows are organizational prompts, not health, evacuation or safety deadlines. See current official alerts before acting. **Reproducibility:** given the same sources and Node-compatible compression, the ZIP has fixed timestamps and sorted entries. The tests build twice, compare archive bytes, independently extract files, and validate every file's SHA-256 from its manifest.
 
 **Integrity is not authenticity:** the included checksums can detect accidental changes, but a malicious replacement can update its own checksum. Obtain downloads through a trusted channel and verify release provenance separately.
 

@@ -7,7 +7,7 @@
 
 ## Phase 1: Stabilize
 - Expand water source assessment, safe storage, and sanitation risk registers.
-- Publish accessible checklists for first 72 hours and first two weeks.
+- Publish accessible checklists for first 72 hours and first two weeks. **v0.3: six first-72-hour scenario cards with verified primary references, timed action groups and acceptance checks.**
 - Add basic translations and visual-only/large-print pathways.
 
 ## Phase 2: Sustain
