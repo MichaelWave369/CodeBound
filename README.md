@@ -38,7 +38,7 @@ npm run dev
 
 The local interactive site runs at `http://localhost:4173`. The portable output is in `dist/site/`. Double-click `dist/site/fieldbook.html` or `dist/site/codebound-field-kit.zip` to distribute the fieldbook.
 
-For local interactive hosting of the *packaged* site, use a normal static HTTP server in the `site/` folder inside the ZIP. The provided development server binds only to `127.0.0.1` and is not accessible from the LAN by default.
+To run the interactive version from the extracted ZIP entirely offline, open a terminal in its `site/` directory and run `node scripts/serve.mjs`, then visit `http://localhost:4173`. Node.js 20+ must already be installed. The server binds only to `127.0.0.1`, not to the LAN.
 
 **Reproducibility:** given the same sources and Node-compatible compression, the ZIP has fixed timestamps and sorted entries. The tests build twice, compare archive bytes, independently extract files, and validate every file's SHA-256 from its manifest.
 

@@ -51,7 +51,7 @@ test("ZIP is deterministic, self-contained and its checksums match",async()=>{
     assert.deepEqual(zipA,zipB);
     assert.equal(sha256(zipA),a.digest);
     const files=extract(zipA);
-    for(const name of ["fieldbook.html","fieldbook.txt","fieldbook.json","README.txt","LICENSE.txt","SHA256SUMS.txt","site/index.html","site/app.js"])
+    for(const name of ["fieldbook.html","fieldbook.txt","fieldbook.json","README.txt","LICENSE.txt","SHA256SUMS.txt","site/index.html","site/app.js","site/scripts/serve.mjs"])
       assert.ok(files[name],"missing "+name);
     for(const line of files["SHA256SUMS.txt"].toString().trim().split("\n")){
       const m=line.match(/^([a-f0-9]{64})  (.+)$/);

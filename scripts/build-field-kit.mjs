@@ -9,7 +9,7 @@ import { GUIDES, SOURCES } from "../data/guides.js";
 export const VERSION = "0.2.0";
 const SITE_FILES = [
   "index.html", "styles.css", "app.js", "service-worker.js",
-  "manifest.webmanifest", "icon.svg", "data/guides.js", "src/core.js"
+  "manifest.webmanifest", "icon.svg", "data/guides.js", "src/core.js", "scripts/serve.mjs"
 ];
 const WARNING = "Starting points only, NOT certified field procedures. Follow local emergency instructions and qualified guidance. External references are links, not cached documents.";
 const HTML_CSS = "body{max-width:850px;margin:0 auto;padding:2rem 1.25rem;background:#f8faf6;color:#213329;font:16px/1.6 system-ui,sans-serif}" +
@@ -152,7 +152,9 @@ function kitReadme() {
   return "CODEBOUND PORTABLE KIT " + VERSION + "\n\n" +
     "OPEN fieldbook.html by double-clicking, without a server or network.\n" +
     "fieldbook.txt is plain text. fieldbook.json contains structured records.\n" +
-    "site/ is the interactive version; requires a local HTTP server for its JavaScript modules.\n" +
+    "site/ contains an offline-capable local HTTP server for the interactive web app.\n" +
+    "From inside site/, run: node scripts/serve.mjs, then open http://localhost:4173.\n" +
+    "Node.js 20+ is required for this interactive local server; fieldbook.html needs none.\n" +
     "Sources are external links, not copied into the package.\n" +
     "Use SHA256SUMS.txt to check each package file's integrity. Hashes detect corruption,\n" +
     "not authenticity; verify trusted provenance separately.\n\n" + WARNING + "\n\n" +
