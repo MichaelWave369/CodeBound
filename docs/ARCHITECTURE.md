@@ -31,3 +31,10 @@
 - Materials quantity estimators for safe low-risk builds.
 
 No remote synchronization or real-time verification is currently implemented. PWA cache may be evicted by the browser; use the ZIP/USB copy for long-term offline preservation.
+## v0.2 portable field kit
+
+- `scripts/build-field-kit.mjs` takes the structured guide catalog, emits standalone `fieldbook.html` (inline CSS, no JavaScript), `fieldbook.txt`, `fieldbook.json`, and a deterministic ZIP.
+- `dist/site/` contains the deployable website plus the portable documents and ZIP download. Deploy `dist/site/`, not the repository root.
+- The ZIP includes the static site source, a license, README, and per-file SHA-256 sums. A separate `.sha256` accompanies the ZIP.
+- This provides independent *readability* of the guide collection without the network; interactive features still require an HTTP server and JavaScript.
+- External third-party reference documents are not bundled. Hashes detect corruption, but do not independently establish publisher identity.

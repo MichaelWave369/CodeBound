@@ -18,6 +18,16 @@ jobs:
         with:
           node-version: "22"
       - run: npm test
+      - run: npm run build
+      - name: Verify field kit checksum
+        run: cd dist/site && sha256sum -c codebound-field-kit.zip.sha256
+      - uses: actions/upload-artifact@v4
+        with:
+          name: codebound-field-kit-${{ github.sha }}
+          path: |
+            dist/site/codebound-field-kit.zip
+            dist/site/codebound-field-kit.zip.sha256
+          if-no-files-found: error
   deploy:
     if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
     needs: tests
@@ -31,9 +41,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - run: npm run build
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: .
+          path: dist/site
       - id: deployment
         uses: actions/deploy-pages@v4

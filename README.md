@@ -1,61 +1,63 @@
 # CODEBOUND
-### A living, offline-first atlas for rebuilding the essentials
+### A living, offline-first atlas for restoring essential community systems
 
 > Preserve knowledge. Restore services. Share what works. Leave no one behind.
 
-**CodeBound** is a free, practical field library for communities preparing for or recovering from major disruptions. It combines hands-on build instructions, a dependency atlas, locally runnable software, and source-backed safety notes. It is equally useful for a neighborhood resilience project, a makerspace, a disaster-preparedness class, or a community recovering from an outage.
+**CodeBound** is a free, practical field library for neighbors, responders and makerspaces preparing for or recovering from infrastructure disruption. This is an open resilience project, **not a prediction of collapse**.
 
-## What exists in v0.1
+## What's included in v0.2
 
-- 16 foundational system cards across water, sanitation, food, shelter, energy, communications, health, repair, education, and local governance.
-- Searchable, printable, mobile-friendly atlas and interactive build details.
-- Offline-first static web app with an installable web manifest and service-worker cache.
-- Two working tools: minimum emergency water planner and local-only commons supply ledger with JSON export/import.
-- Dependency references, practical checks, source links, risk warnings, and transparent review status.
-- Zero runtime dependencies. Plain HTML, CSS, and JavaScript. Runs on modest hardware.
-- Unit tests and GitHub Actions for quality checks.
+- 16 foundational, structured system cards across water, sanitation, food, shelter, energy, communications, health, repair, education, and community.
+- Searchable, accessible, printable mobile-friendly web atlas with dependencies, materials, ordered steps, acceptance checks, cautions, and links to primary sources.
+- Two client-side tools: minimum emergency water planner and local-only inventory ledger with JSON export/import.
+- Offline-first PWA with a service worker; runtime has no third-party packages or required cloud API.
+- **Portable field kit:** one-click ZIP containing a completely standalone HTML fieldbook, a plain-text edition, machine-readable JSON, a snapshot of the web app, README, license and SHA-256 checksums.
+- A reproducible Node.js build, automated archive verification, and GitHub Actions deployment.
 
-## Run locally
+## Choose the right offline mode
 
-Requires Node.js 20+ to use the included local web server and test suite.
+| Situation | Use | Requirements |
+| --- | --- | --- |
+| Browse after previously loading the site | Installed/cached PWA | A compatible browser and a successful first online load |
+| Open field instructions from USB, even after a complete outage | **fieldbook.html** from the portable ZIP | Any modern browser; double-click the file; **no server, JavaScript, internet or storage** |
+| Read on a simple device or print | **fieldbook.txt** from the ZIP | Any text reader or printer |
+| Access the interactive water calculator and shared-supply ledger | Website / local HTTP server | A modern browser with JavaScript, a local HTTP server and an HTML5-compatible device |
+| Integrate guides into other tools | **fieldbook.json** | A JSON parser |
 
-1. Clone the repository.
-2. Run: npm test
-3. Run: npm run dev
-4. Open http://localhost:4173
+The portable HTML contains all guide text and inline styling. **External references are *links*, not bundled copies**, so source websites cannot be accessed without connectivity. Download authoritative documents separately and obey their licensing if archival use is necessary.
 
-Alternatively serve the folder using any static HTTP server. Direct file:// opening is not supported because modules and service workers require HTTP(S). The first successful load requires internet or local hosting; **once cached**, core materials work offline in supported browsers. External source links are not cached.
+## Build locally
+
+Requires Node.js 20+ to run tests, package builder and development server.
+
+```sh
+npm test
+npm run build
+npm run dev
+```
+
+The local interactive site runs at `http://localhost:4173`. The portable output is in `dist/site/`. Double-click `dist/site/fieldbook.html` or `dist/site/codebound-field-kit.zip` to distribute the fieldbook.
+
+For local interactive hosting of the *packaged* site, use a normal static HTTP server in the `site/` folder inside the ZIP. The provided development server binds only to `127.0.0.1` and is not accessible from the LAN by default.
+
+**Reproducibility:** given the same sources and Node-compatible compression, the ZIP has fixed timestamps and sorted entries. The tests build twice, compare archive bytes, independently extract files, and validate every file's SHA-256 from its manifest.
+
+**Integrity is not authenticity:** the included checksums can detect accidental changes, but a malicious replacement can update its own checksum. Obtain downloads through a trusted channel and verify release provenance separately.
 
 ## Deploy on GitHub Pages
 
-In repository Settings > Pages, choose **GitHub Actions** as the build and deployment source. Merging to main runs tests and attempts a Pages deployment. The expected URL will be https://michaelwave369.github.io/CodeBound/ only after Pages is enabled and a deployment succeeds. Do not treat this address as live until verified.
+The Actions workflow validates, builds, publishes `dist/site/` and uploads the ZIP as an Actions artifact. In repository **Settings → Pages**, select **GitHub Actions** as deployment source. The expected URL is https://michaelwave369.github.io/CodeBound/ only after Pages is enabled and deployment succeeds.
 
-## Reading a field guide
+## Safety & limitations
 
-Each system has: objective, materials, build steps, acceptance checks, risks, dependencies, reference sources, and a practical software pattern where relevant. Some are **reference-backed starting points** and others are **community design drafts**. Neither means professionally certified. Verify locally before deploying high-risk systems.
+These are **starting points**, not certified medical, structural, water, sanitation or electrical procedures. Reference-backed means linked authoritative material underlies key safety facts; community drafts still need trained review. Verify current local guidance and conditions.
 
-**Safety:** This is NOT a substitute for professional medical advice, structural assessment, electrical qualifications, water-quality testing, sanitation regulations, or local emergency authority instructions. Do not rely on homemade filters to remove toxic chemicals, do not improvise mains connections, and do not use fuel-burning generators indoors. Knowledge should reduce harm, not multiply it.
+Never assume boiling removes chemical contamination; never improvise household mains wiring or fuel-burning equipment inside buildings. Respect consent, privacy and accessibility. Do not treat the atlas as legal authority.
 
-## Core dependency chain
+## Contributing
 
-1. People, accountability, communications, and immediate risk assessment.
-2. Safe water and hand hygiene.
-3. Waste separation, sanitation, and safe food.
-4. Shelter, heating/cooling safety, and basic lighting.
-5. Growing food, repair capacity, teaching, and resilient offline records.
-6. Legitimate, transparent local decision-making and long-term infrastructure recovery.
+Every guide must document its objective, materials, ordered steps, measurable acceptance checks, hazards, sources, maintenance and an honest review status. See [CONTRIBUTING.md](CONTRIBUTING.md), [docs/EDITORIAL.md](docs/EDITORIAL.md) and [docs/ROADMAP.md](docs/ROADMAP.md). Contributions focused on evidence, translations, tested low-risk builds, illustrations and community resilience are welcome.
 
-## Repository structure
+## License
 
-- index.html, styles.css, app.js: offline-first interactive atlas
-- data/guides.js: structured systems, steps, sources, dependencies
-- src/core.js: tested calculations, search, and ledger validation
-- examples/: independently runnable, small code recipes
-- docs/: architecture, editorial criteria, and expansion plan
-- tests/: regression tests for data and core utilities
-
-## Philosophy
-
-**People above profit. Evidence above folklore. Cooperation above coercion.** Designed for many possible futures, not as a prediction of collapse.
-
-Contributions welcome. See CONTRIBUTING.md. Distributed under MIT; source documents linked from the atlas retain their original licenses and rights, and are not copied into this repository.
+MIT for original CodeBound content; linked third-party documents retain their own licenses and copyrights. People above profit. Evidence above folklore. Cooperation above coercion.
