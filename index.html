@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#101c18">
+  <meta name="description" content="CodeBound: an offline-first atlas of practical systems, build instructions and local software for resilient communities.">
+  <meta name="color-scheme" content="dark">
+  <link rel="icon" href="./icon.svg" type="image/svg+xml">
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="stylesheet" href="./styles.css">
+  <title>CodeBound | Knowledge for the Commons</title>
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+  <header class="topbar">
+    <a class="brand" href="./" aria-label="CodeBound home">
+      <span class="brand-mark" aria-hidden="true">C<span>·</span>B</span>
+      <span class="brand-stack"><strong>CODEBOUND</strong><small>THE COMMONS ATLAS</small></span>
+    </a>
+    <nav aria-label="Main navigation" class="main-nav">
+      <a href="#atlas">Field atlas</a><a href="#workbench">Workbench</a><a href="#protocol">The protocol</a>
+    </nav>
+    <span class="network-pill" id="network-status" aria-live="polite">LOCAL FIRST</span>
+  </header>
+
+  <main id="main">
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="hero-copy">
+        <div class="eyebrow"><span class="pulse-dot"></span> OPEN KNOWLEDGE SYSTEM / EDITION 0.1</div>
+        <h1 id="hero-title">KNOWLEDGE<br>THAT <em>SURVIVES</em><br>THE NETWORK.</h1>
+        <p>A field atlas for rebuilding the essentials. Water. Food. Shelter. Power. Communication. Community. No gatekeepers. No account. Practical instructions, verified where possible, with safety limits where it matters.</p>
+        <div class="hero-actions">
+          <a class="primary-action" href="#atlas">Explore the atlas <span aria-hidden="true">↗</span></a>
+          <a class="secondary-action" href="#workbench">Open the workbench</a>
+        </div>
+        <p class="hero-caption">Designed for everyday resilience, outages, and recovery. Not a prediction of catastrophe.</p>
+      </div>
+      <aside class="hero-panel" aria-label="Core system overview">
+        <div class="panel-header"><span>FIELD LOG / 001</span><span>PUBLIC DOMAIN OF KNOWLEDGE</span></div>
+        <div class="orbital" aria-hidden="true">
+          <div class="orbit orbit-outer"></div><div class="orbit orbit-middle"></div><div class="orbit orbit-inner"></div>
+          <span class="core-symbol">✳</span>
+          <span class="orbit-tag tag-one">WATER</span><span class="orbit-tag tag-two">FOOD</span><span class="orbit-tag tag-three">CARE</span><span class="orbit-tag tag-four">POWER</span>
+        </div>
+        <div class="panel-footer"><span>START WITH PEOPLE.</span><strong>REBUILD TOGETHER.</strong></div>
+      </aside>
+    </section>
+
+    <section class="metrics" aria-label="Atlas highlights">
+      <div><strong id="system-count">16</strong><span>FOUNDATION SYSTEMS</span></div>
+      <div><strong>03</strong><span>REBUILD PHASES</span></div>
+      <div><strong>02</strong><span>WORKING OFFLINE TOOLS</span></div>
+      <div><strong>0</strong><span>RUNTIME DEPENDENCIES</span></div>
+    </section>
+
+    <section class="sequence" aria-labelledby="sequence-title">
+      <div class="section-intro"><span class="kicker">01 / RESTORATION SEQUENCE</span><h2 id="sequence-title">Start with what keeps people alive.</h2><p>Systems depend on systems. A solar panel is not much help if there is no safe water or someone to maintain it.</p></div>
+      <div class="sequence-grid">
+        <div><b>01</b><strong>ASSESS & CONNECT</strong><small>People · Safety · Communication</small></div>
+        <div><b>02</b><strong>PROTECT HEALTH</strong><small>Water · Sanitation · Food</small></div>
+        <div><b>03</b><strong>RESTORE CAPACITY</strong><small>Shelter · Light · Repair</small></div>
+        <div><b>04</b><strong>BUILD THE COMMONS</strong><small>Learning · Records · Self-governance</small></div>
+      </div>
+    </section>
+
+    <section class="atlas-section" id="atlas" aria-labelledby="atlas-title">
+      <div class="section-intro flex-heading"><div><span class="kicker">02 / THE FIELD ATLAS</span><h2 id="atlas-title">Open instructions. Real checks.</h2><p>Every card tells you what you need, what to do, how to check your work, and when to get expert help.</p></div><div class="atlas-count" id="results-count" role="status" aria-live="polite"></div></div>
+      <div class="filter-bar">
+        <label class="search-label" for="search"><span>SEARCH THE SYSTEMS</span><input id="search" type="search" placeholder="Find water, radios, gardens, repairs…" autocomplete="off"></label>
+        <label for="category"><span>DOMAIN</span><select id="category"><option value="all">All domains</option></select></label>
+        <label for="phase"><span>STAGE</span><select id="phase"><option value="all">All stages</option><option>Stabilize</option><option>Sustain</option><option>Rebuild</option></select></label>
+      </div>
+      <div class="guide-grid" id="guide-grid"></div>
+      <p id="no-results" class="empty-message" hidden>No matching guides. Try a different word or reset your filters.</p>
+    </section>
+
+    <section class="workbench-section" id="workbench" aria-labelledby="workbench-title">
+      <div class="section-intro"><span class="kicker">03 / THE WORKBENCH</span><h2 id="workbench-title">Tools that work without a cloud.</h2><p>Simple code, clear inputs, and local data ownership. Keep a paper backup too, because browsers are not magical indestructible vaults.</p></div>
+      <div class="tool-grid">
+        <article class="tool-panel">
+          <div class="tool-top"><span class="tool-number">TOOL_01</span><span class="tool-status">CALCULATOR</span></div>
+          <h3>Emergency water baseline</h3>
+          <p>CDC starting guidance: at least one US gallon per person per day for three or more days. This estimates a <strong>minimum for people only</strong>.</p>
+          <form id="water-form" class="water-form">
+            <label for="people">PEOPLE<input id="people" type="number" inputmode="numeric" min="1" max="10000" step="1" value="4" required></label>
+            <label for="days">DAYS<input id="days" type="number" inputmode="numeric" min="1" max="365" step="1" value="3" required></label>
+            <button type="submit">Calculate water</button>
+          </form>
+          <output id="water-result" class="water-result" aria-live="polite"></output>
+          <p class="fineprint">Add water for pets, illness, hot weather, extra hygiene, and local conditions. This tool does not test water quality. <a href="https://www.cdc.gov/water-emergency/about/how-to-create-and-store-an-emergency-water-supply.html" target="_blank" rel="noopener noreferrer">CDC source ↗</a></p>
+        </article>
+        <article class="tool-panel">
+          <div class="tool-top"><span class="tool-number">TOOL_02</span><span class="tool-status">LOCAL LEDGER</span></div>
+          <h3>The commons supply ledger</h3>
+          <p>Log shared supplies on this device. Nothing is uploaded. Export JSON regularly and avoid sensitive personal data.</p>
+          <form id="ledger-form" class="ledger-form">
+            <label for="item-name">ITEM<input id="item-name" maxlength="80" placeholder="Soap, rice, lanterns…" required></label>
+            <label for="item-qty">QUANTITY<input id="item-qty" type="number" min="0.01" max="10000000" step="any" value="1" required></label>
+            <label for="item-unit">UNIT<select id="item-unit"><option>items</option><option>gallons</option><option>liters</option><option>pounds</option><option>kilograms</option><option>packs</option><option>boxes</option><option>hours</option></select></label>
+            <label for="item-note" class="wide">PUBLIC NOTE (OPTIONAL)<input id="item-note" maxlength="200" placeholder="Condition / location, not people's details"></label>
+            <button type="submit" class="wide">+ Add to inventory</button>
+          </form>
+          <p class="ledger-message" id="ledger-message" role="status" aria-live="polite"></p>
+          <div class="ledger-header"><strong id="inventory-count">0 SUPPLY RECORDS</strong><div><button type="button" class="quiet-button" id="export-ledger">Export JSON ↓</button><label for="import-ledger" class="import-control">Import JSON ↑</label><input id="import-ledger" type="file" accept=".json,application/json" class="visually-hidden"></div></div>
+          <div class="inventory-scroll"><table class="ledger-table"><thead><tr><th scope="col">ITEM</th><th scope="col">QTY</th><th scope="col"><span class="visually-hidden">Remove</span></th></tr></thead><tbody id="inventory-rows"></tbody></table></div>
+          <button type="button" class="clear-button" id="clear-ledger">Clear local inventory</button>
+        </article>
+      </div>
+    </section>
+
+    <section class="protocol-section" id="protocol" aria-labelledby="protocol-title">
+      <div><span class="kicker">04 / OUR PROTOCOL</span><h2 id="protocol-title">The point is to keep each other here.</h2></div>
+      <div class="protocol-copy"><p><strong>People above profit. Evidence above folklore. Cooperation above coercion.</strong></p><p>CodeBound is a living draft, not a licensed engineering plan or medical manual. High-risk systems need qualified review. Contributions should state sources, uncertainty, real acceptance checks, and failure conditions. Share freely, protect privacy, and build in ways people can maintain.</p><a href="https://github.com/MichaelWave369/CodeBound" target="_blank" rel="noopener noreferrer">Read and contribute on GitHub ↗</a></div>
+    </section>
+  </main>
+
+  <footer class="site-footer"><span>CODEBOUND © CONTRIBUTORS / MIT</span><span>FREE TO STUDY · BUILD · CORRECT · SHARE</span><span>MADE FOR THE COMMONS.</span></footer>
+
+  <dialog id="guide-dialog" aria-labelledby="dialog-title">
+    <div class="dialog-shell">
+      <div class="dialog-top no-print"><span>CODEBOUND / FIELD INSTRUCTION</span><button type="button" id="close-dialog" aria-label="Close guide">✕</button></div>
+      <div id="guide-detail"></div>
+      <div class="dialog-actions no-print"><button type="button" id="print-guide">Print this guide</button><button type="button" id="copy-guide">Copy guide link</button></div>
+    </div>
+  </dialog>
+  <script type="module" src="./app.js"></script>
+  <noscript><p class="no-js">JavaScript is required for interactive filters and tools. The source instructions are available in data/guides.js and can be printed or preserved from the repository.</p></noscript>
+</body>
+</html>

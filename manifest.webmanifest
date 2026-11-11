@@ -1,0 +1,13 @@
+{
+  "name": "CodeBound · The Commons Atlas",
+  "short_name": "CodeBound",
+  "description": "Offline-first field systems for resilient communities",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#0d1814",
+  "theme_color": "#101c18",
+  "icons": [
+    { "src": "./icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}
