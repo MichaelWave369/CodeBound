@@ -109,6 +109,7 @@ export function renderText() {
     if (!values.length) lines.push("  (none listed)");
     lines.push("");
   }
+  lines.push("RESPONSE SCENARIO INDEX", ...RESPONSE_PLANS.map(p => p.title), "");
   lines.push("72-HOUR RESPONSE CARDS (times are planning prompts, not official deadlines)", "");
   for (const [i,p] of RESPONSE_PLANS.entries()) {
     lines.push("=".repeat(72), "RESPONSE " + (i+1) + " / " + p.id, p.title.toUpperCase(),
