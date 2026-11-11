@@ -5,11 +5,12 @@ import { fileURLToPath } from "node:url";
 import { createHash } from "node:crypto";
 import { deflateRawSync } from "node:zlib";
 import { GUIDES, SOURCES } from "../data/guides.js";
+import { RESPONSE_PLANS, RESPONSE_SOURCES } from "../data/scenarios.js";
 
-export const VERSION = "0.2.0";
+export const VERSION = "0.3.0";
 const SITE_FILES = [
   "index.html", "styles.css", "app.js", "service-worker.js",
-  "manifest.webmanifest", "icon.svg", "data/guides.js", "src/core.js", "scripts/serve.mjs"
+  "manifest.webmanifest", "icon.svg", "data/guides.js", "data/scenarios.js", "scenarios-ui.js", "src/core.js", "scripts/serve.mjs"
 ];
 const WARNING = "Starting points only, NOT certified field procedures. Follow local emergency instructions and qualified guidance. External references are links, not cached documents.";
 const HTML_CSS = "body{max-width:850px;margin:0 auto;padding:2rem 1.25rem;background:#f8faf6;color:#213329;font:16px/1.6 system-ui,sans-serif}" +
@@ -57,12 +58,31 @@ export function renderHtml() {
     "<h3>Source links</h3>" + refsHtml(g) +
     '<p class="review">Not independently field-certified. Confirm local conditions before use.</p></section>'
   ).join("\n");
+  const responses = RESPONSE_PLANS.map((p,i) => {
+    const step = (heading, entries) => "<h3>" + heading + "</h3>" + escapeList(entries,"ol");
+    const labels = p.guides.map(dependency);
+    const sourceList = p.sourceIds.map(key => {
+      const source = RESPONSE_SOURCES[key];
+      if (!source) throw Error("Unknown response source " + key);
+      return '<li><a href="' + escapeHtml(source.url) + '">' + escapeHtml(source.title) + "</a> (online only)</li>";
+    }).join("");
+    return '<section class="guide" id="response-' + escapeHtml(p.id) + '">' +
+      '<p class="meta">72-HOUR RESPONSE ' + (i+1) + " / " + escapeHtml(p.category) +
+      " / " + escapeHtml(p.review) + "</p><h2>" + escapeHtml(p.title) + "</h2>" +
+      "<p>" + escapeHtml(p.summary) + "</p><p><strong>Trigger:</strong> " + escapeHtml(p.trigger) + "</p>" +
+      step("First 0–2 hours",p.first) + step("Hours 2–24",p.day) + step("Hours 24–72",p.next) +
+      "<h3>Materials</h3>" + escapeList(p.tools) + "<h3>Acceptance checks</h3>" + escapeList(p.verify) +
+      '<div class="warning"><h3>Escalate to qualified help</h3>' + escapeList(p.escalate) + "</div>" +
+      "<h3>Related field guides</h3>" + escapeList(labels) +
+      "<h3>Official online sources</h3><ul>" + sourceList + "</ul>" +
+      '<p class="review">Planning times are prompts, not emergency deadlines. Not field-certified.</p></section>';
+  }).join("\n");
   return '<!doctype html><html lang="en"><head><meta charset="utf-8">' +
     '<meta name="viewport" content="width=device-width, initial-scale=1">' +
     '<title>CodeBound Standalone Fieldbook</title><style>' + HTML_CSS + "</style></head><body>" +
     "<header><small>CODEBOUND / OFFLINE FIELD KIT / " + VERSION + "</small>" +
     "<h1>Knowledge that survives the network.</h1><p>All " + GUIDES.length +
-    " guides inside one self-contained HTML file. Open directly from a USB drive; no server, JavaScript or network.</p></header>" +
+    " guides and " + RESPONSE_PLANS.length + " 72-hour response cards inside one self-contained HTML file. Open directly from a USB drive; no server, JavaScript or network.</p></header>" +
     '<div class="warning"><strong>SAFETY:</strong> ' + escapeHtml(WARNING) + "</div>" +
     '<section><h2>First 72 hours: essential checks</h2><ol>' +
     "<li>Assess immediate danger and reach available emergency services. Avoid unsafe buildings and routes.</li>" +
@@ -71,7 +91,10 @@ export function renderHtml() {
     "<li>Coordinate voluntary help, record task owners and preserve personal privacy.</li>" +
     "<li>Use the field cards for verification, limits and references, not as professional certification.</li>" +
     "</ol></section>" +
-    '<nav id="contents" aria-label="Field guide contents"><h2>Contents</h2><ol>' + index + "</ol></nav>" +
+    '<nav id="response-contents" aria-label="72-hour response cards"><h2>72-hour scenario plans</h2><ol>' +
+    RESPONSE_PLANS.map(p => '<li><a href="#response-' + escapeHtml(p.id) + '">' + escapeHtml(p.title) + '</a></li>').join("") +
+    '</ol></nav>' + responses +
+    '<nav id="contents" aria-label="Field guide contents"><h2>Field guide contents</h2><ol>' + index + "</ol></nav>" +
     cards + '<footer><p>CodeBound contributors / MIT. Referenced third-party works retain their rights.</p></footer></body></html>\n';
 }
 export function renderText() {
@@ -86,6 +109,21 @@ export function renderText() {
     if (!values.length) lines.push("  (none listed)");
     lines.push("");
   }
+  lines.push("72-HOUR RESPONSE CARDS (times are planning prompts, not official deadlines)", "");
+  for (const [i,p] of RESPONSE_PLANS.entries()) {
+    lines.push("=".repeat(72), "RESPONSE " + (i+1) + " / " + p.id, p.title.toUpperCase(),
+      "Trigger: " + p.trigger, "Review: " + p.review, p.summary, "");
+    section("FIRST 0–2 HOURS",p.first);
+    section("HOURS 2–24",p.day);
+    section("HOURS 24–72",p.next);
+    section("MATERIALS",p.tools);
+    section("ACCEPTANCE CHECKS",p.verify);
+    section("ESCALATE TO QUALIFIED HELP",p.escalate);
+    section("RELATED FIELD GUIDES",p.guides.map(dependency));
+    section("SOURCE LINKS (ONLINE ONLY)",p.sourceIds.map(key => RESPONSE_SOURCES[key].title + ": " + RESPONSE_SOURCES[key].url));
+    lines.push("Not field-certified. Follow locally issued advice and real-time alerts.", "");
+  }
+  lines.push("FOUNDATIONAL FIELD GUIDES", "");
   for (const [i,g] of GUIDES.entries()) {
     lines.push("=".repeat(72), "FIELD " + (i+1) + " / " + g.id, g.title.toUpperCase(),
       "Category: " + g.category + "; Stage: " + g.phase + "; Priority: " + g.priority +
@@ -103,7 +141,7 @@ export function renderText() {
   return lines.join("\n") + "\n";
 }
 export function renderJson() {
-  return JSON.stringify({format:"codebound-fieldbook-v1",version:VERSION,warning:WARNING,sources:SOURCES,guides:GUIDES},null,2) + "\n";
+  return JSON.stringify({format:"codebound-fieldbook-v1",version:VERSION,warning:WARNING,sources:SOURCES,guides:GUIDES,responseSources:RESPONSE_SOURCES,responsePlans:RESPONSE_PLANS},null,2) + "\n";
 }
 export const sha256 = bytes => createHash("sha256").update(bytes).digest("hex");
 function crc32(data) {
@@ -152,6 +190,7 @@ function kitReadme() {
   return "CODEBOUND PORTABLE KIT " + VERSION + "\n\n" +
     "OPEN fieldbook.html by double-clicking, without a server or network.\n" +
     "fieldbook.txt is plain text. fieldbook.json contains structured records.\n" +
+    "All formats include six 72-hour scenario plans and sixteen foundational guides.\n" +
     "site/ contains an offline-capable local HTTP server for the interactive web app.\n" +
     "From inside site/, run: node scripts/serve.mjs, then open http://localhost:4173.\n" +
     "Node.js 20+ is required for this interactive local server; fieldbook.html needs none.\n" +

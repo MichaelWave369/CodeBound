@@ -38,3 +38,10 @@ No remote synchronization or real-time verification is currently implemented. PW
 - The ZIP includes the static site source, a license, README, and per-file SHA-256 sums. A separate `.sha256` accompanies the ZIP.
 - This provides independent *readability* of the guide collection without the network; interactive features still require an HTTP server and JavaScript.
 - External third-party reference documents are not bundled. Hashes detect corruption, but do not independently establish publisher identity.
+
+## v0.3 First 72 Hours scenarios
+
+- `data/scenarios.js`: six reviewable scenario cards and primary official source references. The 0–2h, 2–24h and 24–72h windows are planning aids, not safety deadlines or clinical triage.
+- `scenarios-ui.js`: static-source, text-node-only DOM rendering with native `details` and `summary` accessibility controls.
+- `scripts/build-field-kit.mjs`: automatically includes the same plans in the standalone HTML, plain text, JSON, and portable ZIP. No manual copying of advice into separate publications.
+- `tests/scenarios.test.js`: checks uniqueness, cross-references, minimum safety criteria and provenance; `tests/field-kit.test.js` confirms all plans are in every export format.

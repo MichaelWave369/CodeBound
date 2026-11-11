@@ -19,7 +19,7 @@
       <span class="brand-stack"><strong>CODEBOUND</strong><small>THE COMMONS ATLAS</small></span>
     </a>
     <nav aria-label="Main navigation" class="main-nav">
-      <a href="#atlas">Field atlas</a><a href="#field-kit">Portable kit</a><a href="#workbench">Workbench</a><a href="#protocol">The protocol</a>
+      <a href="#response">First 72 hours</a><a href="#atlas">Field atlas</a><a href="#field-kit">Portable kit</a><a href="#workbench">Workbench</a><a href="#protocol">The protocol</a>
     </nav>
     <span class="network-pill" id="network-status" aria-live="polite">LOCAL FIRST</span>
   </header>
@@ -27,7 +27,7 @@
   <main id="main">
     <section class="hero" aria-labelledby="hero-title">
       <div class="hero-copy">
-        <div class="eyebrow"><span class="pulse-dot"></span> OPEN KNOWLEDGE SYSTEM / EDITION 0.2</div>
+        <div class="eyebrow"><span class="pulse-dot"></span> OPEN KNOWLEDGE SYSTEM / EDITION 0.3</div>
         <h1 id="hero-title">KNOWLEDGE<br>THAT <em>SURVIVES</em><br>THE NETWORK.</h1>
         <p>A field atlas for rebuilding the essentials. Water. Food. Shelter. Power. Communication. Community. No gatekeepers. No account. Practical instructions, verified where possible, with safety limits where it matters.</p>
         <div class="hero-actions">
@@ -76,6 +76,18 @@
         <div><b>03</b><strong>RESTORE CAPACITY</strong><small>Shelter · Light · Repair</small></div>
         <div><b>04</b><strong>BUILD THE COMMONS</strong><small>Learning · Records · Self-governance</small></div>
       </div>
+    </section>
+
+    <section class="response-section" id="response" aria-labelledby="response-title">
+      <div class="section-intro">
+        <span class="kicker">03 / THE FIRST 72 HOURS</span>
+        <h2 id="response-title">When the systems stop, start here.</h2>
+        <p>Choose the disruption that fits your situation. Each response card organizes priorities for the first 2 hours, next 22 hours and following two days. These are planning prompts, not official deadlines. Always follow current emergency alerts and local authorities.</p>
+      </div>
+      <div class="response-stages" id="response-stages" aria-label="Response planning windows"></div>
+      <p class="response-counter" id="response-count" aria-live="polite"></p>
+      <div class="response-grid" id="response-cards"></div>
+      <p class="response-standalone">For offline-first emergency use, <a href="./fieldbook.html#response-contents">open the self-contained printable fieldbook</a> or download the complete ZIP. No web connection is required after obtaining the file.</p>
     </section>
 
     <section class="atlas-section" id="atlas" aria-labelledby="atlas-title">
@@ -139,6 +151,7 @@
     </div>
   </dialog>
   <script type="module" src="./app.js"></script>
+  <script type="module" src="./scenarios-ui.js"></script>
   <noscript><p class="no-js">JavaScript is required for interactive filters and tools. The source instructions are available in data/guides.js and can be printed or preserved from the repository.</p></noscript>
 </body>
 </html>
