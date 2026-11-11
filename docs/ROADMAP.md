@@ -1,0 +1,25 @@
+# CodeBound roadmap
+
+## Phase 0: Preserve
+- Export the repo and source links to redundant offline media.
+- Validate usability on a low-end Android browser and desktop.
+- Add plain-text index and printable field cards.
+
+## Phase 1: Stabilize
+- Expand water source assessment, safe storage, and sanitation risk registers.
+- Publish accessible checklists for first 72 hours and first two weeks.
+- Add basic translations and visual-only/large-print pathways.
+
+## Phase 2: Sustain
+- Publish local plant calendars, seed saving, tool repair, water demand observation, and energy budgets.
+- Offer locally testable templates for public supply accounting.
+- Add independent expert review and field-test records.
+
+## Phase 3: Rebuild
+- Publish modules for local schools, repair co-ops, open libraries, transport routes, and consensus procedures.
+- Add resilient local-first communications and community-controlled synchronization.
+- Bridge interoperable guides to other open-source projects without requiring them.
+
+## Release gates
+
+Each new module must have steps, inputs, measurable acceptance checks, safety limits, source provenance, and at least two independent reviewers for high-risk topics. Releases must pass tests and an offline smoke test. No deceptive claims that a draft is a certified engineering design.
