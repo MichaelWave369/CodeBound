@@ -1,0 +1,195 @@
+// Portable, deterministic, dependency-free CodeBound field kit builder.
+import { readFile, writeFile, mkdir, rm } from "node:fs/promises";
+import { resolve, dirname, join, sep } from "node:path";
+import { fileURLToPath } from "node:url";
+import { createHash } from "node:crypto";
+import { deflateRawSync } from "node:zlib";
+import { GUIDES, SOURCES } from "../data/guides.js";
+
+export const VERSION = "0.2.0";
+const SITE_FILES = [
+  "index.html", "styles.css", "app.js", "service-worker.js",
+  "manifest.webmanifest", "icon.svg", "data/guides.js", "src/core.js", "scripts/serve.mjs"
+];
+const WARNING = "Starting points only, NOT certified field procedures. Follow local emergency instructions and qualified guidance. External references are links, not cached documents.";
+const HTML_CSS = "body{max-width:850px;margin:0 auto;padding:2rem 1.25rem;background:#f8faf6;color:#213329;font:16px/1.6 system-ui,sans-serif}" +
+  "h1{font-size:2.6rem;line-height:1.12}h2{line-height:1.18}h3{margin-top:1.35rem}" +
+  "a{color:#16563e}a:focus-visible{outline:3px solid #205f3a}" +
+  "header{padding:1.5rem;background:#e6eee1;border:2px solid #31513f}" +
+  ".warning{border-left:4px solid #aa5f2c;padding:.5rem 1rem;background:#fff3e5}" +
+  ".guide{padding-top:1.5rem;border-top:2px solid #31513f;break-before:page}" +
+  "li{margin:.4rem 0;overflow-wrap:anywhere}.meta,.review{font:12px/1.5 ui-monospace,monospace}" +
+  "@media print{@page{margin:15mm}body{max-width:none;padding:0;background:white;color:black;font-size:10pt}" +
+  "header,.warning{background:white}.guide{break-before:page}h2,h3{break-after:avoid}a{color:black}}";
+
+export function escapeHtml(v) {
+  return String(v).replace(/[&<>"']/g, ch => ({
+    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+  })[ch]);
+}
+const escapeList = (items, tag = "ul") => "<" + tag + ">" +
+  items.map(x => "<li>" + escapeHtml(x) + "</li>").join("") + "</" + tag + ">";
+const dependency = (id) => GUIDES.find(g => g.id === id)?.title || id;
+function refsHtml(g) {
+  if (!g.sources.length) return "<p>No references yet: independent review required.</p>";
+  return "<ul>" + g.sources.map(key => {
+    const s = SOURCES[key];
+    if (!s) throw new Error("Unknown source: " + key);
+    return '<li><a href="' + escapeHtml(s.url) + '">' + escapeHtml(s.title) + "</a> (online only)</li>";
+  }).join("") + "</ul>";
+}
+export function renderHtml() {
+  const index = GUIDES.map((g,i) =>
+    '<li><a href="#' + escapeHtml(g.id) + '">' + (i+1) + ". " + escapeHtml(g.title) + "</a></li>"
+  ).join("");
+  const cards = GUIDES.map((g,i) =>
+    '<section class="guide" id="' + escapeHtml(g.id) + '">' +
+    '<p class="meta">CARD ' + (i+1) + " / " + escapeHtml(g.category.toUpperCase()) + "</p>" +
+    "<h2>" + escapeHtml(g.title) + "</h2><p>" + escapeHtml(g.summary) + "</p>" +
+    '<p class="meta">Stage: ' + escapeHtml(g.phase) + " | Priority: " + g.priority +
+    " | Time: " + escapeHtml(g.effort) + " | Status: " + escapeHtml(g.review) + "</p>" +
+    "<h3>Dependencies</h3>" + escapeList(g.depends.map(dependency)) +
+    "<h3>Materials</h3>" + escapeList(g.materials) +
+    "<h3>Steps</h3>" + escapeList(g.steps,"ol") +
+    "<h3>Acceptance checks</h3>" + escapeList(g.checks) +
+    '<div class="warning"><h3>Hazards / limitations</h3>' + escapeList(g.cautions) + "</div>" +
+    "<h3>Recordkeeping and code</h3><p>" + escapeHtml(g.code) + "</p>" +
+    "<h3>Source links</h3>" + refsHtml(g) +
+    '<p class="review">Not independently field-certified. Confirm local conditions before use.</p></section>'
+  ).join("\n");
+  return '<!doctype html><html lang="en"><head><meta charset="utf-8">' +
+    '<meta name="viewport" content="width=device-width, initial-scale=1">' +
+    '<title>CodeBound Standalone Fieldbook</title><style>' + HTML_CSS + "</style></head><body>" +
+    "<header><small>CODEBOUND / OFFLINE FIELD KIT / " + VERSION + "</small>" +
+    "<h1>Knowledge that survives the network.</h1><p>All " + GUIDES.length +
+    " guides inside one self-contained HTML file. Open directly from a USB drive; no server, JavaScript or network.</p></header>" +
+    '<div class="warning"><strong>SAFETY:</strong> ' + escapeHtml(WARNING) + "</div>" +
+    '<section><h2>First 72 hours: essential checks</h2><ol>' +
+    "<li>Assess immediate danger and reach available emergency services. Avoid unsafe buildings and routes.</li>" +
+    "<li>Check safe drinking water and handwashing, sanitation, food condition and urgent health needs.</li>" +
+    "<li>Check shelter, temperature hazards, lighting, accessible paths and communication backups.</li>" +
+    "<li>Coordinate voluntary help, record task owners and preserve personal privacy.</li>" +
+    "<li>Use the field cards for verification, limits and references, not as professional certification.</li>" +
+    "</ol></section>" +
+    '<nav id="contents" aria-label="Field guide contents"><h2>Contents</h2><ol>' + index + "</ol></nav>" +
+    cards + '<footer><p>CodeBound contributors / MIT. Referenced third-party works retain their rights.</p></footer></body></html>\n';
+}
+export function renderText() {
+  const lines = ["CODEBOUND OFFLINE FIELD KIT " + VERSION, "Knowledge that survives the network.",
+    "Contains " + GUIDES.length + " guides. Plain text. No software or network required.", "",
+    "WARNING: " + WARNING, "",
+    "FIRST 72 HOURS: Check immediate danger, people, safe water, sanitation, food safety, shelter and communications. Follow official guidance.", "",
+    "GUIDE INDEX", ...GUIDES.map((g,i) => (i+1) + ". " + g.title), ""];
+  function section(name, values) {
+    lines.push(name);
+    values.forEach((x,i) => lines.push("  " + (i+1) + ". " + x));
+    if (!values.length) lines.push("  (none listed)");
+    lines.push("");
+  }
+  for (const [i,g] of GUIDES.entries()) {
+    lines.push("=".repeat(72), "FIELD " + (i+1) + " / " + g.id, g.title.toUpperCase(),
+      "Category: " + g.category + "; Stage: " + g.phase + "; Priority: " + g.priority +
+      "; Effort: " + g.effort + "; Review: " + g.review, "", g.summary, "");
+    section("DEPENDENCIES",g.depends.map(dependency));
+    section("MATERIALS",g.materials);
+    section("STEPS",g.steps);
+    section("ACCEPTANCE CHECKS",g.checks);
+    section("HAZARDS AND LIMITS",g.cautions);
+    lines.push("CODE / RECORDKEEPING: " + g.code, "");
+    section("SOURCE LINKS (ONLINE ONLY)",g.sources.map(key => SOURCES[key].title + ": " + SOURCES[key].url));
+    lines.push("Not independently field-certified; consult qualified local expertise.", "");
+  }
+  lines.push("END / CODEBOUND / MIT");
+  return lines.join("\n") + "\n";
+}
+export function renderJson() {
+  return JSON.stringify({format:"codebound-fieldbook-v1",version:VERSION,warning:WARNING,sources:SOURCES,guides:GUIDES},null,2) + "\n";
+}
+export const sha256 = bytes => createHash("sha256").update(bytes).digest("hex");
+function crc32(data) {
+  let crc=0xffffffff;
+  for (const byte of data) {
+    crc ^= byte;
+    for (let i=0;i<8;i++) crc=(crc>>>1) ^ (0xedb88320 & -(crc&1));
+  }
+  return (crc ^ 0xffffffff) >>> 0;
+}
+// ZIP uses deflate, CRC32 and a central directory; archive has fixed DOS timestamps.
+export function makeZip(files) {
+  const bodies=[], centers=[];
+  let offset=0;
+  for (const path of Object.keys(files).sort()) {
+    if (!/^[a-zA-Z0-9._/-]+$/.test(path) || path.startsWith("/") || path.split("/").includes("..")) throw Error("Unsafe ZIP path: " + path);
+    const name=Buffer.from(path,"utf8");
+    const data=Buffer.isBuffer(files[path])?files[path]:Buffer.from(files[path],"utf8");
+    const zipped=deflateRawSync(data,{level:9});
+    const checksum=crc32(data);
+    const head=Buffer.alloc(30);
+    head.writeUInt32LE(0x04034b50,0); head.writeUInt16LE(20,4);
+    head.writeUInt16LE(0x0800,6); head.writeUInt16LE(8,8);
+    head.writeUInt16LE(33,12); head.writeUInt32LE(checksum,14);
+    head.writeUInt32LE(zipped.length,18); head.writeUInt32LE(data.length,22);
+    head.writeUInt16LE(name.length,26);
+    bodies.push(head,name,zipped);
+    const center=Buffer.alloc(46);
+    center.writeUInt32LE(0x02014b50,0); center.writeUInt16LE(20,4);
+    center.writeUInt16LE(20,6); center.writeUInt16LE(0x0800,8); center.writeUInt16LE(8,10);
+    center.writeUInt16LE(33,14); center.writeUInt32LE(checksum,16);
+    center.writeUInt32LE(zipped.length,20); center.writeUInt32LE(data.length,24);
+    center.writeUInt16LE(name.length,28); center.writeUInt32LE(offset,42);
+    centers.push(center,name);
+    offset += head.length+name.length+zipped.length;
+  }
+  const dir=Buffer.concat(centers);
+  const end=Buffer.alloc(22);
+  end.writeUInt32LE(0x06054b50,0);
+  end.writeUInt16LE(Object.keys(files).length,8);
+  end.writeUInt16LE(Object.keys(files).length,10);
+  end.writeUInt32LE(dir.length,12); end.writeUInt32LE(offset,16);
+  return Buffer.concat([...bodies,dir,end]);
+}
+function kitReadme() {
+  return "CODEBOUND PORTABLE KIT " + VERSION + "\n\n" +
+    "OPEN fieldbook.html by double-clicking, without a server or network.\n" +
+    "fieldbook.txt is plain text. fieldbook.json contains structured records.\n" +
+    "site/ contains an offline-capable local HTTP server for the interactive web app.\n" +
+    "From inside site/, run: node scripts/serve.mjs, then open http://localhost:4173.\n" +
+    "Node.js 20+ is required for this interactive local server; fieldbook.html needs none.\n" +
+    "Sources are external links, not copied into the package.\n" +
+    "Use SHA256SUMS.txt to check each package file's integrity. Hashes detect corruption,\n" +
+    "not authenticity; verify trusted provenance separately.\n\n" + WARNING + "\n\n" +
+    "Original CodeBound materials are MIT-licensed. External sources retain their rights.\n";
+}
+export async function buildFieldKit(root=process.cwd(),out=join(root,"dist")) {
+  root=resolve(root); out=resolve(out);
+  if (root===out || root.startsWith(out+sep)) throw Error("Invalid output path.");
+  await rm(out,{recursive:true,force:true});
+  const site=join(out,"site");
+  await mkdir(site,{recursive:true});
+  const archive={};
+  for (const name of SITE_FILES) {
+    const bytes=await readFile(join(root,name));
+    const target=join(site,name);
+    await mkdir(dirname(target),{recursive:true});
+    await writeFile(target,bytes);
+    archive["site/"+name]=bytes;
+  }
+  archive["LICENSE.txt"]=await readFile(join(root,"LICENSE"));
+  archive["README.txt"]=Buffer.from(kitReadme());
+  archive["fieldbook.html"]=Buffer.from(renderHtml());
+  archive["fieldbook.txt"]=Buffer.from(renderText());
+  archive["fieldbook.json"]=Buffer.from(renderJson());
+  archive["SHA256SUMS.txt"]=Buffer.from(Object.keys(archive).sort()
+    .map(name => sha256(archive[name])+"  "+name).join("\n")+"\n");
+  const zip=makeZip(archive);
+  const digest=sha256(zip);
+  for (const name of ["fieldbook.html","fieldbook.txt","fieldbook.json","SHA256SUMS.txt"])
+    await writeFile(join(site,name),archive[name]);
+  await writeFile(join(site,"codebound-field-kit.zip"),zip);
+  await writeFile(join(site,"codebound-field-kit.zip.sha256"),digest+"  codebound-field-kit.zip\n");
+  return {out,zipBytes:zip.length,digest,files:Object.keys(archive).sort()};
+}
+if (process.argv[1] && resolve(process.argv[1])===fileURLToPath(import.meta.url)) {
+  const result=await buildFieldKit();
+  console.log("CodeBound "+VERSION+" built "+result.files.length+" files; ZIP "+result.zipBytes+" bytes; SHA256 "+result.digest);
+}
