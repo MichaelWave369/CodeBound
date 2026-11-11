@@ -8,7 +8,7 @@ export const SOURCES = {
   who_sanitation: { title: "WHO · Sanitation Safety Planning, 2nd edition", url: "https://www.who.int/publications/i/item/9789240062887" },
   food_safety: { title: "FoodSafety.gov · Food Safety in a Disaster", url: "https://www.foodsafety.gov/keep-food-safe/food-safety-in-disaster-or-emergency" },
   cdc_power: { title: "CDC · Safety During a Power Outage", url: "https://www.cdc.gov/natural-disasters/response/what-to-do-protect-yourself-during-a-power-outage.html" },
-  fema_kit: { title: "FEMA · Build an Emergency Kit", url: "https://www.fema.gov/press-release/20200612/how-build-kit-emergencies" }
+  fema_kit: { title: "FEMA · Build an Emergency Kit", url: "https://www.fema.gov/print/pdf/node/503732" }
 };
 
 export const GUIDES = [
