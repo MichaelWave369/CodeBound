@@ -19,7 +19,7 @@
       <span class="brand-stack"><strong>CODEBOUND</strong><small>THE COMMONS ATLAS</small></span>
     </a>
     <nav aria-label="Main navigation" class="main-nav">
-      <a href="#response">First 72 hours</a><a href="#atlas">Field atlas</a><a href="#field-kit">Portable kit</a><a href="#workbench">Workbench</a><a href="#protocol">The protocol</a>
+      <a href="#response">First 72 hours</a><a href="#workshop">Workshop</a><a href="#atlas">Field atlas</a><a href="#field-kit">Portable kit</a><a href="#workbench">Workbench</a><a href="#protocol">The protocol</a>
     </nav>
     <span class="network-pill" id="network-status" aria-live="polite">LOCAL FIRST</span>
   </header>
@@ -27,7 +27,7 @@
   <main id="main">
     <section class="hero" aria-labelledby="hero-title">
       <div class="hero-copy">
-        <div class="eyebrow"><span class="pulse-dot"></span> OPEN KNOWLEDGE SYSTEM / EDITION 0.3</div>
+        <div class="eyebrow"><span class="pulse-dot"></span> OPEN KNOWLEDGE SYSTEM / EDITION 0.4</div>
         <h1 id="hero-title">KNOWLEDGE<br>THAT <em>SURVIVES</em><br>THE NETWORK.</h1>
         <p>A field atlas for rebuilding the essentials. Water. Food. Shelter. Power. Communication. Community. No gatekeepers. No account. Practical instructions, verified where possible, with safety limits where it matters.</p>
         <div class="hero-actions">
@@ -50,7 +50,7 @@
     <section class="metrics" aria-label="Atlas highlights">
       <div><strong id="system-count">16</strong><span>FOUNDATION SYSTEMS</span></div>
       <div><strong>03</strong><span>REBUILD PHASES</span></div>
-      <div><strong>02</strong><span>WORKING OFFLINE TOOLS</span></div>
+      <div><strong>03</strong><span>LOCAL OFFLINE TOOLS</span></div>
       <div><strong>0</strong><span>RUNTIME DEPENDENCIES</span></div>
     </section>
 
@@ -88,6 +88,23 @@
       <p class="response-counter" id="response-count" aria-live="polite"></p>
       <div class="response-grid" id="response-cards"></div>
       <p class="response-standalone">For offline-first emergency use, <a href="./fieldbook.html#response-contents">open the self-contained printable fieldbook</a> or download the complete ZIP. No web connection is required after obtaining the file.</p>
+    </section>
+
+    <section class="workshop-section" id="workshop" aria-labelledby="workshop-title">
+      <div class="section-intro">
+        <span class="kicker">04 / COMMUNITY WORKSHOP</span>
+        <h2 id="workshop-title">Learn it. Build it. Check it. Teach it.</h2>
+        <p>Five guided, low-risk practice builds with component diagrams, materials, repeatable steps, stop conditions and measurable checks. No cloud accounts or proprietary software needed for the written lessons.</p>
+        <p class="workshop-intro-note">Practice marks record your own attempts on this device. They are <strong>not certifications or proof that an installation is safe.</strong> The printable USB fieldbook includes the same lessons without JavaScript.</p>
+      </div>
+      <div class="workshop-actions">
+        <strong id="workshop-progress">0 / 5 PRACTICED</strong>
+        <button id="workshop-export" type="button">Export practice log ↓</button>
+        <button id="workshop-reset" type="button">Reset practice marks</button>
+      </div>
+      <p id="workshop-status" class="workshop-status" role="status" aria-live="polite"></p>
+      <div id="workshop-lessons" class="workshop-grid"></div>
+      <p class="workshop-footnote">These are evidence-informed community drafts. See product instructions and professional guidance for hazardous work; stopping a dangerous activity is a successful lesson outcome.</p>
     </section>
 
     <section class="atlas-section" id="atlas" aria-labelledby="atlas-title">
@@ -152,6 +169,7 @@
   </dialog>
   <script type="module" src="./app.js"></script>
   <script type="module" src="./scenarios-ui.js"></script>
+  <script type="module" src="./workshop-ui.js"></script>
   <noscript><p class="no-js">JavaScript is required for interactive filters and tools. The source instructions are available in data/guides.js and can be printed or preserved from the repository.</p></noscript>
 </body>
 </html>

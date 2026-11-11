@@ -5,10 +5,12 @@
 
 **CodeBound** is a free, practical field library for neighbors, responders and makerspaces preparing for or recovering from infrastructure disruption. This is an open resilience project, **not a prediction of collapse**.
 
-## What's included in v0.3
+## What's included in v0.4
 
 - 16 foundational, structured system cards across water, sanitation, food, shelter, energy, communications, health, repair, education, and community.
 - **Six 72-hour response plans** for water disruption, power outages, unsafe food storage, communications loss, shelter displacement and voluntary neighborhood coordination. Each has timed checkpoints, acceptance tests, escalation warnings and source provenance.
+- **Five Community Workshop builds** with accessible process diagrams, bills of materials, step-by-step instructions, verifiable checks, stop conditions, maintenance, source links and teach-back exercises: USB lighting, tool checkout, seed nursery, offline laptop fieldbook, and public notice board.
+- Optional local workshop practice log with export and reset. Practice marks are **not certifications**; no personal names are recorded.
 - Searchable, accessible, printable mobile-friendly web atlas with dependencies, materials, ordered steps, acceptance checks, cautions, and links to primary sources.
 - Two client-side tools: minimum emergency water planner and local-only inventory ledger with JSON export/import.
 - Offline-first PWA with a service worker; runtime has no third-party packages or required cloud API.
@@ -25,7 +27,7 @@
 | Access the interactive water calculator and shared-supply ledger | Website / local HTTP server | A modern browser with JavaScript, a local HTTP server and an HTML5-compatible device |
 | Integrate guides into other tools | **fieldbook.json** | A JSON parser |
 
-The portable HTML contains all guide and response-plan text and inline styling. **External references are *links*, not bundled copies**, so source websites cannot be accessed without connectivity. Download authoritative documents separately and obey their licensing if archival use is necessary.
+The portable HTML contains all guide, response-plan and workshop lesson text, including inline SVG process diagrams, and inline styling. **External references are *links*, not bundled copies**, so source websites cannot be accessed without connectivity. Download authoritative documents separately and obey their licensing if archival use is necessary.
 
 ## Build locally
 
@@ -40,6 +42,8 @@ npm run dev
 The local interactive site runs at `http://localhost:4173`. The portable output is in `dist/site/`. Double-click `dist/site/fieldbook.html` or `dist/site/codebound-field-kit.zip` to distribute the fieldbook.
 
 To run the interactive version from the extracted ZIP entirely offline, open a terminal in its `site/` directory and run `node scripts/serve.mjs`, then visit `http://localhost:4173`. Node.js 20+ must already be installed. The server binds only to `127.0.0.1`, not to the LAN.
+
+**Workshop use:** Open the Community Workshop on the site for expandable lessons and a local-only practice log, or read the same lessons from `fieldbook.html` without JavaScript. All diagrams are high-level component flows, **not wiring/engineering schematics**. No workshop completion establishes safety certification.
 
 **Response-plan times:** The 0–2, 2–24 and 24–72 hour windows are organizational prompts, not health, evacuation or safety deadlines. See current official alerts before acting. **Reproducibility:** given the same sources and Node-compatible compression, the ZIP has fixed timestamps and sorted entries. The tests build twice, compare archive bytes, independently extract files, and validate every file's SHA-256 from its manifest.
 

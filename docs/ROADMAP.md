@@ -13,6 +13,7 @@
 ## Phase 2: Sustain
 - Publish local plant calendars, seed saving, tool repair, water demand observation, and energy budgets.
 - Offer locally testable templates for public supply accounting.
+- **v0.4 Community Workshop:** five low-risk teach-back lessons with component-flow diagrams, materials, safety limits, verified sources and locally exportable practice marks; available in the portable fieldbook.
 - Add independent expert review and field-test records.
 
 ## Phase 3: Rebuild
