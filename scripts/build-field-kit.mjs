@@ -7,12 +7,13 @@ import { deflateRawSync } from "node:zlib";
 import { GUIDES, SOURCES } from "../data/guides.js";
 import { RESPONSE_PLANS, RESPONSE_SOURCES } from "../data/scenarios.js";
 import { WORKSHOP_LESSONS, WORKSHOP_SOURCES } from "../data/workshops.js";
+import { BUILD_SHEETS, BUILD_SOURCES, MATERIALS } from "../data/blueprints.js";
 import { renderWorkshopDiagram } from "../src/workshop-core.js";
 
-export const VERSION = "0.4.0";
+export const VERSION = "0.5.0";
 const SITE_FILES = [
   "index.html", "styles.css", "app.js", "service-worker.js",
-  "manifest.webmanifest", "icon.svg", "data/guides.js", "data/scenarios.js", "scenarios-ui.js", "data/workshops.js", "workshop-ui.js", "src/core.js", "src/workshop-core.js", "scripts/serve.mjs"
+  "manifest.webmanifest", "icon.svg", "data/guides.js", "data/scenarios.js", "scenarios-ui.js", "data/workshops.js", "workshop-ui.js", "data/blueprints.js", "blueprints-ui.js", "src/blueprint-core.js", "src/core.js", "src/workshop-core.js", "scripts/serve.mjs"
 ];
 const WARNING = "Starting points only, NOT certified field procedures. Follow local emergency instructions and qualified guidance. External references are links, not cached documents.";
 const HTML_CSS = "body{max-width:850px;margin:0 auto;padding:2rem 1.25rem;background:#f8faf6;color:#213329;font:16px/1.6 system-ui,sans-serif}" +
@@ -102,12 +103,34 @@ export function renderHtml() {
       "<h3>Sources (online only)</h3><ul>"+sourceList+"</ul>"+
       '<p class="review">Practice draft only; not certification or an approved technical installation.</p></section>';
   }).join("\n");
+  const blueprintCards = BUILD_SHEETS.map((b,i)=>{
+    const group=(title,items,ordered=false)=>"<h3>"+title+"</h3>"+escapeList(items,ordered?"ol":"ul");
+    const sources=b.sources.map(id=>{
+      const s=BUILD_SOURCES[id];
+      if(!s)throw Error("Unknown blueprint source "+id);
+      return '<li><a href="'+escapeHtml(s.url)+'">'+escapeHtml(s.title)+"</a> (online only)</li>";
+    }).join("");
+    const parts=b.materials.map(m=>m.quantity+" "+MATERIALS[m.id].unit+" — "+MATERIALS[m.id].name);
+    return '<section class="guide" id="blueprint-'+escapeHtml(b.id)+'">' +
+      '<p class="meta">SYSTEM BUILD SHEET '+(i+1)+" / "+escapeHtml(b.domain)+" / "+escapeHtml(b.review)+"</p>"+
+      "<h2>"+escapeHtml(b.title)+"</h2><p>"+escapeHtml(b.summary)+"</p>"+
+      '<p class="meta">TIME: '+escapeHtml(b.duration)+" | SCOPE: "+escapeHtml(b.makes)+"</p>"+
+      "<p><strong>Component flow:</strong> "+escapeHtml(b.diagram.join(" → "))+"</p>"+
+      group("Starter bill of materials / one station",parts)+group("Tools and conditions",b.tools)+
+      group("Build and operate",b.steps,true)+group("Acceptance checks",b.checks)+
+      '<div class="warning">'+group("Stop conditions",b.stop)+"</div>"+
+      group("Maintenance",b.maintenance)+
+      "<p><strong>Teach-back:</strong> "+escapeHtml(b.handoff)+"</p>"+
+      group("Related guides",b.dependencies.map(dependency))+
+      "<h3>Source references (online only)</h3><ul>"+sources+"</ul>"+
+      '<p class="review">Community starter design only. Quantities are not population capacity or technical certification.</p></section>';
+  }).join("\n");
   return '<!doctype html><html lang="en"><head><meta charset="utf-8">' +
     '<meta name="viewport" content="width=device-width, initial-scale=1">' +
     '<title>CodeBound Standalone Fieldbook</title><style>' + HTML_CSS + "</style></head><body>" +
     "<header><small>CODEBOUND / OFFLINE FIELD KIT / " + VERSION + "</small>" +
     "<h1>Knowledge that survives the network.</h1><p>All " + GUIDES.length +
-    " guides, " + RESPONSE_PLANS.length + " 72-hour response cards and " + WORKSHOP_LESSONS.length + " workshop lessons inside one self-contained HTML file. Open directly from a USB drive; no server, JavaScript or network.</p></header>" +
+    " guides, " + RESPONSE_PLANS.length + " 72-hour response cards, " + WORKSHOP_LESSONS.length + " workshops and " + BUILD_SHEETS.length + " starter system blueprints inside one self-contained HTML file. Open directly from a USB drive; no server, JavaScript or network.</p></header>" +
     '<div class="warning"><strong>SAFETY:</strong> ' + escapeHtml(WARNING) + "</div>" +
     '<section><h2>First 72 hours: essential checks</h2><ol>' +
     "<li>Assess immediate danger and reach available emergency services. Avoid unsafe buildings and routes.</li>" +
@@ -122,6 +145,9 @@ export function renderHtml() {
     '<nav id="workshop-contents" aria-label="Community workshop lessons"><h2>Community workshop lessons</h2><ol>' +
     WORKSHOP_LESSONS.map(l => '<li><a href="#workshop-' + escapeHtml(l.id) + '">' + escapeHtml(l.title) + '</a></li>').join("") +
     '</ol></nav>' + workshopCards +
+    '<nav id="blueprint-contents" aria-label="Community system blueprints"><h2>Community system build sheets</h2><ol>' +
+    BUILD_SHEETS.map(b=>'<li><a href="#blueprint-'+escapeHtml(b.id)+'">'+escapeHtml(b.title)+'</a></li>').join("") +
+    '</ol></nav>' + blueprintCards +
     '<nav id="contents" aria-label="Field guide contents"><h2>Field guide contents</h2><ol>' + index + "</ol></nav>" +
     cards + '<footer><p>CodeBound contributors / MIT. Referenced third-party works retain their rights.</p></footer></body></html>\n';
 }
@@ -168,6 +194,22 @@ export function renderText() {
     section("SOURCE LINKS (ONLINE ONLY)",l.sourceIds.map(id=>WORKSHOP_SOURCES[id].title+": "+WORKSHOP_SOURCES[id].url));
     lines.push("Practice draft only, not field certification.","");
   }
+  lines.push("COMMUNITY SYSTEM BUILD SHEET INDEX",...BUILD_SHEETS.map(b=>b.title),"");
+  for(const [i,b] of BUILD_SHEETS.entries()) {
+    lines.push("=".repeat(72),"BUILD SHEET "+(i+1)+" / "+b.id,b.title.toUpperCase(),
+      "Scope: "+b.makes,"Review: "+b.review,"Duration: "+b.duration,b.summary,"",
+      "COMPONENT FLOW: "+b.diagram.join(" -> "), "");
+    section("STARTER MATERIALS / ONE STATION",b.materials.map(m=>m.quantity+" "+MATERIALS[m.id].unit+" — "+MATERIALS[m.id].name));
+    section("TOOLS AND CONDITIONS",b.tools);
+    section("BUILD AND OPERATE",b.steps);
+    section("ACCEPTANCE CHECKS",b.checks);
+    section("STOP CONDITIONS",b.stop);
+    section("MAINTENANCE",b.maintenance);
+    lines.push("TEACH-BACK: "+b.handoff,"");
+    section("RELATED GUIDES",b.dependencies.map(dependency));
+    section("SOURCES (ONLINE ONLY)",b.sources.map(id=>BUILD_SOURCES[id].title+": "+BUILD_SOURCES[id].url));
+    lines.push("Starter station quantities are planning estimates, not population capacity or certification.","");
+  }
   lines.push("FOUNDATIONAL FIELD GUIDES", "");
   for (const [i,g] of GUIDES.entries()) {
     lines.push("=".repeat(72), "FIELD " + (i+1) + " / " + g.id, g.title.toUpperCase(),
@@ -186,7 +228,7 @@ export function renderText() {
   return lines.join("\n") + "\n";
 }
 export function renderJson() {
-  return JSON.stringify({format:"codebound-fieldbook-v1",version:VERSION,warning:WARNING,sources:SOURCES,guides:GUIDES,responseSources:RESPONSE_SOURCES,responsePlans:RESPONSE_PLANS,workshopSources:WORKSHOP_SOURCES,workshopLessons:WORKSHOP_LESSONS},null,2) + "\n";
+  return JSON.stringify({format:"codebound-fieldbook-v1",version:VERSION,warning:WARNING,sources:SOURCES,guides:GUIDES,responseSources:RESPONSE_SOURCES,responsePlans:RESPONSE_PLANS,workshopSources:WORKSHOP_SOURCES,workshopLessons:WORKSHOP_LESSONS,buildSources:BUILD_SOURCES,materialCatalog:MATERIALS,buildSheets:BUILD_SHEETS},null,2) + "\n";
 }
 export const sha256 = bytes => createHash("sha256").update(bytes).digest("hex");
 function crc32(data) {
@@ -235,7 +277,7 @@ function kitReadme() {
   return "CODEBOUND PORTABLE KIT " + VERSION + "\n\n" +
     "OPEN fieldbook.html by double-clicking, without a server or network.\n" +
     "fieldbook.txt is plain text. fieldbook.json contains structured records.\n" +
-    "All formats include six 72-hour plans, five workshops and sixteen field guides.\n" +
+    "All formats include six 72-hour plans, five workshops, six system build sheets and sixteen field guides.\n" +
     "site/ contains an offline-capable local HTTP server for the interactive web app.\n" +
     "From inside site/, run: node scripts/serve.mjs, then open http://localhost:4173.\n" +
     "Node.js 20+ is required for this interactive local server; fieldbook.html needs none.\n" +
