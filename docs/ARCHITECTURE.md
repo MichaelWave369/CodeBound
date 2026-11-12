@@ -61,3 +61,12 @@ No remote synchronization or real-time verification is currently implemented. PW
 - `blueprints-ui.js` uses native `details`, number inputs, an accessible table and CSV/print controls. No local account or storage is required.
 - The static HTML, text and JSON fieldbooks embed all six sheets with quantities per one station. Online sources are referenced but not mirrored.
 - The ZIP includes the complete interactive calculator and source data for local HTTP use; `tests/blueprints.test.js` and extended portable-kit tests check all parts and cross-references.
+
+## v0.6 Repair & Reproduction
+
+- `data/repairs.js` stores six noncritical repair patterns with compatibility and safety boundaries.
+- `src/repair-core.js` validates unique IDs, asset tags, ISO dates and event types and supports at most 500 local observations. A recorded inspection is not a certification or release-from-quarantine authorization.
+- `repair-ui.js` renders expandable repair instructions, maintains an optional browser-only history, and exports/imports validated JSON and spreadsheet-safe CSV.
+- `examples/label-holder.scad` is editable parametric OpenSCAD for a dry tabletop label holder. NIOSH provides 3D printing ventilation and burn risk guidance. Not for structural, electrical, pressure or potable use.
+- `docs/REPAIR-WORKSHEET.txt` supports paper verification and handoff.
+- The fieldkit generator includes six patterns in standalone HTML/plain text/JSON and bundles the OpenSCAD/worksheet sources for offline use. Run tests and a physical/offline smoke test before treating as field-proven.

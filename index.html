@@ -19,7 +19,7 @@
       <span class="brand-stack"><strong>CODEBOUND</strong><small>THE COMMONS ATLAS</small></span>
     </a>
     <nav aria-label="Main navigation" class="main-nav">
-      <a href="#response">First 72 hours</a><a href="#workshop">Workshop</a><a href="#blueprints">Build sheets</a><a href="#atlas">Field atlas</a><a href="#field-kit">Portable kit</a><a href="#workbench">Workbench</a><a href="#protocol">The protocol</a>
+      <a href="#response">First 72 hours</a><a href="#workshop">Workshop</a><a href="#blueprints">Build sheets</a><a href="#repair">Repair desk</a><a href="#atlas">Field atlas</a><a href="#field-kit">Portable kit</a><a href="#workbench">Workbench</a><a href="#protocol">The protocol</a>
     </nav>
     <span class="network-pill" id="network-status" aria-live="polite">LOCAL FIRST</span>
   </header>
@@ -27,7 +27,7 @@
   <main id="main">
     <section class="hero" aria-labelledby="hero-title">
       <div class="hero-copy">
-        <div class="eyebrow"><span class="pulse-dot"></span> OPEN KNOWLEDGE SYSTEM / EDITION 0.5</div>
+        <div class="eyebrow"><span class="pulse-dot"></span> OPEN KNOWLEDGE SYSTEM / EDITION 0.6</div>
         <h1 id="hero-title">KNOWLEDGE<br>THAT <em>SURVIVES</em><br>THE NETWORK.</h1>
         <p>A field atlas for rebuilding the essentials. Water. Food. Shelter. Power. Communication. Community. No gatekeepers. No account. Practical instructions, verified where possible, with safety limits where it matters.</p>
         <div class="hero-actions">
@@ -136,6 +136,47 @@
       <p class="blueprint-outro">All build sheets are embedded in the standalone fieldbook and portable ZIP. The interactive quantity calculator needs the local web app; each static fieldbook sheet includes a one-station bill of materials.</p>
     </section>
 
+    <section class="repair-section" id="repair" aria-labelledby="repair-title">
+      <div class="section-intro">
+        <span class="kicker">06 / REPAIR AND REPRODUCTION</span>
+        <h2 id="repair-title">Repair what you can. Retire what you must.</h2>
+        <p>Six step-by-step noncritical component and inspection patterns with measurable compatibility gates, stop conditions and handoff checks. Reproducing a part never guarantees safety in a different application.</p>
+      </div>
+      <div class="repair-patterns" id="repair-patterns"></div>
+      <section class="repair-log-panel" aria-labelledby="repair-log-title">
+        <div class="section-intro"><span class="kicker">LOCAL ONLY / MAINTENANCE DESK</span>
+          <h3 id="repair-log-title">Asset and repair history</h3>
+          <p>Use nonpersonal asset tags. An inspection record or approved replacement alone is not clearance from quarantine. A review date is a reminder, not a safety certificate.</p>
+        </div>
+        <form id="repair-form" class="repair-form">
+          <label for="repair-asset">Asset tag<input id="repair-asset" maxlength="48" placeholder="e.g. LIGHT-001" required></label>
+          <label for="repair-pattern">Repair pattern<select id="repair-pattern" required></select></label>
+          <label for="repair-event">Event type<select id="repair-event" required></select></label>
+          <label for="repair-date">Date<input id="repair-date" type="date" required></label>
+          <label for="repair-next">Next review (optional)<input id="repair-next" type="date"></label>
+          <label for="repair-note" class="repair-wide">Non-sensitive notes<input id="repair-note" maxlength="180" placeholder="Condition and confirmed part ID"></label>
+          <button type="submit" class="repair-wide">Record local event</button>
+        </form>
+        <p class="repair-message" id="repair-message" role="status" aria-live="polite"></p>
+        <div class="repair-toolbar">
+          <div><strong id="repair-count">0 RECORDS / 0 ASSETS</strong><span id="repair-flags">0 QUARANTINE HISTORY / 0 REVIEW DUE</span></div>
+          <div>
+            <button type="button" id="repair-export">Export JSON</button>
+            <button type="button" id="repair-csv">Export CSV</button>
+            <label class="repair-import" for="repair-import">Import JSON</label>
+            <input id="repair-import" type="file" accept=".json,application/json" class="visually-hidden">
+            <button type="button" id="repair-clear">Clear log</button>
+          </div>
+        </div>
+        <div class="repair-table-wrap"><table class="repair-table">
+          <thead><tr><th scope="col">Asset</th><th scope="col">Event / date</th><th scope="col">Notes</th><th scope="col">Edit</th></tr></thead>
+          <tbody id="repair-log-rows"></tbody>
+        </table></div>
+        <p class="repair-notice">Local records are observations, not approval, inspection certification or legal compliance. Avoid personal or medical information in shared logs.</p>
+        <a class="repair-worksheet-link" href="./docs/REPAIR-WORKSHEET.txt" download>Download printable repair worksheet</a>
+      </section>
+    </section>
+
     <section class="atlas-section" id="atlas" aria-labelledby="atlas-title">
       <div class="section-intro flex-heading"><div><span class="kicker">02 / THE FIELD ATLAS</span><h2 id="atlas-title">Open instructions. Real checks.</h2><p>Every card tells you what you need, what to do, how to check your work, and when to get expert help.</p></div><div class="atlas-count" id="results-count" role="status" aria-live="polite"></div></div>
       <div class="filter-bar">
@@ -200,6 +241,7 @@
   <script type="module" src="./scenarios-ui.js"></script>
   <script type="module" src="./workshop-ui.js"></script>
   <script type="module" src="./blueprints-ui.js"></script>
+  <script type="module" src="./repair-ui.js"></script>
   <noscript><p class="no-js">JavaScript is required for interactive filters and tools. The source instructions are available in data/guides.js and can be printed or preserved from the repository.</p></noscript>
 </body>
 </html>

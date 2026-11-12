@@ -123,3 +123,50 @@
   .printing-blueprints .blueprint-section > :not(.blueprint-print-only){display:none!important}
   .printing-blueprints .blueprint-print-only{display:block!important;color:#000!important;background:#fff!important}
 }
+
+/* v0.6: repair / replacement station */
+.repair-section{background:#15271f;border-block:1px solid var(--line);padding:76px max(28px,calc((100vw - 1164px)/2))}
+.repair-patterns{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.repair-card{border:1px solid #486a53;background:#0f2018;min-width:0;padding:23px;align-self:start}
+.repair-card-head{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;color:var(--acid);font:10px var(--mono);text-transform:uppercase}
+.repair-card-head span:last-child{color:#a9beaf}
+.repair-card h3{font-size:22px;line-height:1.2;margin:22px 0 12px;letter-spacing:-.03em}
+.repair-summary,.repair-scope,.repair-teach,.repair-disclaimer{font-size:12px;color:#bfd4be;line-height:1.7}
+.repair-details{border-top:1px solid #3b5945;margin-top:15px;padding-top:14px}
+.repair-details summary{color:var(--acid);font-size:13px;font-weight:800;cursor:pointer}
+.repair-body{padding-top:12px}
+.repair-step{border-top:1px solid #34523e;padding:13px 0}
+.repair-step h4,.repair-compatibility h4{color:var(--acid);font:700 11px var(--mono);text-transform:uppercase}
+.repair-detail-list{padding-left:20px;font-size:12px;line-height:1.7;color:#d7e4d7}
+.repair-detail-list li{margin-bottom:7px;overflow-wrap:anywhere}
+.repair-detail-list a,.repair-sample-link,.repair-worksheet-link{color:var(--acid)}
+.repair-compatibility{border-left:3px solid var(--acid);padding:10px 15px;background:#24382a}
+.repair-compatibility p{font-size:12px;line-height:1.65}
+.repair-danger{border-left:3px solid var(--orange);padding-left:14px}
+.repair-danger h4{color:var(--orange)}
+.repair-teach{border-left:3px solid var(--acid);padding-left:10px}
+.repair-sample-link{display:block;font-size:12px;margin:10px 0}
+.repair-log-panel{background:#0d1e16;border:1px solid #54765e;margin-top:28px;padding:26px}
+.repair-log-panel h3{font-size:25px;letter-spacing:-.03em}
+.repair-form{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px}
+.repair-form label{font:700 11px var(--mono);color:#b6cbb9;display:flex;flex-direction:column;gap:8px}
+.repair-form input,.repair-form select{width:100%;min-width:0;min-height:44px;background:#1c3024;border:1px solid #52735a;color:var(--ink);padding:8px}
+.repair-form .repair-wide{grid-column:1/-1}
+.repair-form button{min-height:44px;background:var(--acid);color:#142019;border:0;font-weight:800}
+.repair-message{font:11px/1.6 var(--mono);min-height:20px;color:var(--acid)}
+.repair-toolbar{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px;border-top:1px solid var(--line);padding-top:16px}
+.repair-toolbar>div{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.repair-toolbar strong{font:700 11px var(--mono);color:var(--acid)}
+.repair-toolbar span{font:11px var(--mono);color:#aac1ac}
+.repair-toolbar button,.repair-import{padding:10px;cursor:pointer;font:11px var(--mono);color:var(--ink);background:#263d2e;border:1px solid #5c8266}
+.repair-table-wrap{overflow:auto;max-height:380px;margin-top:20px}
+.repair-table{width:100%;border-collapse:collapse;font-size:12px}
+.repair-table th{font:700 10px var(--mono);color:#b5cbba;text-align:left;border-bottom:1px solid #41614b;padding:12px}
+.repair-table td{color:#d7e6d7;padding:12px;border-bottom:1px solid #324f3b;overflow-wrap:anywhere}
+.repair-table small{display:block;color:#a9c1af}
+.repair-table td button{border:0;background:none;color:var(--orange)}
+.repair-notice{color:#b2cab6;font-size:12px;line-height:1.7}
+.repair-worksheet-link{font-size:12px;font-weight:800}
+@media(max-width:950px){.repair-form{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:760px){.repair-section{padding:45px 18px}.repair-patterns,.repair-form{grid-template-columns:1fr}.repair-card,.repair-log-panel{padding:18px}.main-nav{flex-wrap:wrap;column-gap:15px;row-gap:8px}}
+@media print{.repair-section{display:none!important}}

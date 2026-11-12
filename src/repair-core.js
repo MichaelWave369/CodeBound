@@ -51,11 +51,13 @@ export function repairEventSummary(events,patternIds,today){
     assets.set(event.asset,event);
   }
   const latest=[...assets.values()];
+  const everQuarantined=new Set(clean.filter(x=>x.kind==="quarantined").map(x=>x.asset));
+  const retired=new Set(latest.filter(x=>x.kind==="retired").map(x=>x.asset));
   return {
     records:clean.length,
     assets:assets.size,
-    quarantined:latest.filter(x=>x.kind==="quarantined").length,
-    retired:latest.filter(x=>x.kind==="retired").length,
+    quarantined:[...everQuarantined].filter(asset=>!retired.has(asset)).length,
+    retired:retired.size,
     reviewDue:latest.filter(x=>x.nextReview && x.nextReview<=today && x.kind!=="retired").length
   };
 }

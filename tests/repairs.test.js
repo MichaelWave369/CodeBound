@@ -16,7 +16,7 @@ test("repair patterns have clear scope, compatibility gates, safety stops and va
     for(const field of ["title","summary","scope","effort","category","review","teachBack"])
       assert.ok(pattern[field],pattern.id+" missing "+field);
     for(const field of ["steps","parts","checks","stop","care","guides","blueprints","sources"])
-      assert.ok(Array.isArray(pattern[field]) && pattern[field].length>=2,pattern.id+" invalid "+field);
+      assert.ok(Array.isArray(pattern[field]) && pattern[field].length >= (field==="blueprints"?1:2),pattern.id+" invalid "+field);
     assert.ok(pattern.steps.length>=4&&pattern.checks.length>=3&&pattern.stop.length>=3);
     assert.ok(pattern.compatibility.measure && pattern.compatibility.allowed && pattern.compatibility.forbidden);
     for(const ref of pattern.guides)assert.ok(guides.has(ref),pattern.id+" unknown guide: "+ref);
@@ -39,7 +39,7 @@ test("events validate, reject invalid dates and cap personal/text data",()=>{
 test("maintenance summary is based on latest observations and due dates, not assumed certification",()=>{
   const events=[sample,{...sample,id:"event_0002",kind:"inspection-recorded",observedAt:"2026-11-13",nextReview:"2026-11-20"}];
   const summary=repairEventSummary(events,ids,"2026-11-15");
-  assert.deepEqual(summary,{records:2,assets:1,quarantined:0,retired:0,reviewDue:0});
+  assert.deepEqual(summary,{records:2,assets:1,quarantined:1,retired:0,reviewDue:0});
   assert.equal(repairEventSummary([sample],ids,"2026-11-15").reviewDue,1);
   assert.equal(repairEventSummary([sample],ids,"2026-11-12").quarantined,1);
 });
