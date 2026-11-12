@@ -9,12 +9,14 @@ import { RESPONSE_PLANS, RESPONSE_SOURCES } from "../data/scenarios.js";
 import { WORKSHOP_LESSONS, WORKSHOP_SOURCES } from "../data/workshops.js";
 import { BUILD_SHEETS, BUILD_SOURCES, MATERIALS } from "../data/blueprints.js";
 import {REPAIR_PATTERNS,REPAIR_SOURCES} from "../data/repairs.js";
+import {PRESERVATION_RECORDS,PRESERVATION_SOURCES,MEASUREMENT_RULES} from "../data/preservation.js";
+import {PRESERVATION_FORMAT} from "../src/preservation-core.js";
 import { renderWorkshopDiagram } from "../src/workshop-core.js";
 
-export const VERSION = "0.6.0";
+export const VERSION = "0.7.0";
 const SITE_FILES = [
   "index.html", "styles.css", "app.js", "service-worker.js",
-  "manifest.webmanifest", "icon.svg", "data/guides.js", "data/scenarios.js", "scenarios-ui.js", "data/workshops.js", "workshop-ui.js", "data/blueprints.js", "blueprints-ui.js", "src/blueprint-core.js", "data/repairs.js", "repair-ui.js", "src/repair-core.js", "examples/label-holder.scad", "docs/REPAIR-WORKSHEET.txt", "src/core.js", "src/workshop-core.js", "scripts/serve.mjs"
+  "manifest.webmanifest", "icon.svg", "data/guides.js", "data/scenarios.js", "scenarios-ui.js", "data/workshops.js", "workshop-ui.js", "data/blueprints.js", "blueprints-ui.js", "src/blueprint-core.js", "data/repairs.js", "repair-ui.js", "src/repair-core.js", "examples/label-holder.scad", "docs/REPAIR-WORKSHEET.txt", "src/core.js", "data/preservation.js", "preservation-ui.js", "src/preservation-core.js", "docs/PRESERVATION-PROTOCOL.md", "drawings/label-holder-v1.svg", "drawings/seed-tray-layout-v1.svg", "drawings/water-zones-v1.svg", "templates/seed-log-v1.csv", "templates/notice-v1.txt", "templates/verification-record-v1.txt", "src/workshop-core.js", "scripts/serve.mjs"
 ];
 const WARNING = "Starting points only, NOT certified field procedures. Follow local emergency instructions and qualified guidance. External references are links, not cached documents.";
 const HTML_CSS = "body{max-width:850px;margin:0 auto;padding:2rem 1.25rem;background:#f8faf6;color:#213329;font:16px/1.6 system-ui,sans-serif}" +
@@ -148,12 +150,34 @@ export function renderHtml() {
       (p.id==="printable-sign-holder"?"<p>OpenSCAD source: examples/label-holder.scad included in the portable archive.</p>":"")+
       '<p class="review">Community draft only. Fit alone is not approval or certification.</p></section>';
   }).join("\n");
+  const preservationCards=PRESERVATION_RECORDS.map((p,i)=>{
+    const refs=p.sources.map(id=>{
+      const s=PRESERVATION_SOURCES[id];
+      if(!s)throw Error("Unregistered preservation source "+id);
+      return '<li><a href="'+escapeHtml(s.url)+'">'+escapeHtml(s.title)+'</a> (online only)</li>';
+    }).join("");
+    const assets=p.files.map(path=>
+      '<li><a href="./'+escapeHtml(path)+'">'+escapeHtml(path)+'</a> (included within the ZIP)</li>').join("");
+    const dimensions=p.dimensions.map(d=>d.name+": "+(d.value===null?"TO MEASURE":d.value+" "+d.unit));
+    return '<section class="guide" id="preserve-'+escapeHtml(p.id)+'">'+
+      '<p class="meta">PRESERVATION '+(i+1)+" / "+escapeHtml(p.category)+" / "+escapeHtml(p.revision)+"</p>"+
+      "<h2>"+escapeHtml(p.title)+"</h2><p>"+escapeHtml(p.summary)+"</p>"+
+      "<p><strong>Scope:</strong> "+escapeHtml(p.scope)+"</p>"+
+      "<p><strong>Provenance:</strong> "+escapeHtml(p.provenance)+"</p>"+
+      "<h3>Versioned source files</h3><ul>"+assets+"</ul>"+
+      "<h3>Dimensions and units</h3>"+escapeList(dimensions.length?dimensions:["No physical dimension defined."])+
+      "<p><strong>Tolerance:</strong> "+escapeHtml(p.tolerance)+"</p>"+
+      "<h3>Local reproduction inputs (self-assessment only)</h3>"+escapeList(p.inputs.map(x=>x.label))+
+      "<h3>Acceptance and evidence checks</h3>"+escapeList(p.checks)+
+      "<h3>References</h3><ul>"+refs+"</ul>"+
+      '<p class="review">Draft. Inputs and matching hashes do NOT prove safety, successful fabrication or certification.</p></section>';
+  }).join("\n");
   return '<!doctype html><html lang="en"><head><meta charset="utf-8">' +
     '<meta name="viewport" content="width=device-width, initial-scale=1">' +
     '<title>CodeBound Standalone Fieldbook</title><style>' + HTML_CSS + "</style></head><body>" +
     "<header><small>CODEBOUND / OFFLINE FIELD KIT / " + VERSION + "</small>" +
     "<h1>Knowledge that survives the network.</h1><p>All " + GUIDES.length +
-    " guides, " + RESPONSE_PLANS.length + " 72-hour response cards, " + WORKSHOP_LESSONS.length + " workshops and " + BUILD_SHEETS.length + " starter system blueprints plus " + REPAIR_PATTERNS.length + " repair patterns inside one self-contained HTML file. Open directly from a USB drive; no server, JavaScript or network.</p></header>" +
+    " guides, " + RESPONSE_PLANS.length + " 72-hour response cards, " + WORKSHOP_LESSONS.length + " workshops and " + BUILD_SHEETS.length + " starter system blueprints plus " + REPAIR_PATTERNS.length + " repair patterns and " + PRESERVATION_RECORDS.length + " preservation packs inside one self-contained HTML file. Open directly from a USB drive; no server, JavaScript or network.</p></header>" +
     '<div class="warning"><strong>SAFETY:</strong> ' + escapeHtml(WARNING) + "</div>" +
     '<section><h2>First 72 hours: essential checks</h2><ol>' +
     "<li>Assess immediate danger and reach available emergency services. Avoid unsafe buildings and routes.</li>" +
@@ -174,6 +198,9 @@ export function renderHtml() {
     '<nav id="repair-contents" aria-label="Repair patterns"><h2>Repair and replacement patterns</h2><ol>' +
     REPAIR_PATTERNS.map(p=>'<li><a href="#repair-'+escapeHtml(p.id)+'">'+escapeHtml(p.title)+'</a></li>').join("") +
     '</ol></nav>' + repairCards +
+    '<nav id="preservation-contents" aria-label="Knowledge preservation packs"><h2>Knowledge preservation packs</h2><ol>' +
+    PRESERVATION_RECORDS.map(p=>'<li><a href="#preserve-'+escapeHtml(p.id)+'">'+escapeHtml(p.title)+'</a></li>').join("") +
+    '</ol></nav>' + preservationCards +
     '<nav id="contents" aria-label="Field guide contents"><h2>Field guide contents</h2><ol>' + index + "</ol></nav>" +
     cards + '<footer><p>CodeBound contributors / MIT. Referenced third-party works retain their rights.</p></footer></body></html>\n';
 }
@@ -254,6 +281,20 @@ export function renderText() {
     if(p.id==="printable-sign-holder")lines.push("OPENSCAD: examples/label-holder.scad within portable archive.","");
     lines.push("Not certified. Physical fit does not prove rated strength.","");
   }
+  lines.push("PRESERVATION CATALOG INDEX",...PRESERVATION_RECORDS.map(p=>p.title),"");
+  lines.push("MEASUREMENT PROTOCOL",...MEASUREMENT_RULES,"");
+  for(const [i,p] of PRESERVATION_RECORDS.entries()){
+    lines.push("=".repeat(72),"PRESERVATION "+(i+1)+" / "+p.id,p.title.toUpperCase(),
+      "Revision: "+p.revision,"Scope: "+p.scope,"Provenance: "+p.provenance,
+      "Units: "+p.units,p.summary,"");
+    section("VERSIONED FILES IN ZIP",p.files);
+    section("DESIGN MEASUREMENTS",p.dimensions.map(d=>d.name+": "+(d.value===null?"TO MEASURE":d.value+" "+d.unit)));
+    lines.push("TOLERANCE: "+p.tolerance,"");
+    section("REPRODUCTION INPUTS (NOT CERTIFICATION)",p.inputs.map(x=>x.label));
+    section("VERIFICATION CHECKS",p.checks);
+    section("REFERENCE LINKS (ONLINE ONLY)",p.sources.map(id=>PRESERVATION_SOURCES[id].title+": "+PRESERVATION_SOURCES[id].url));
+    lines.push("All checked inputs are self-reported, not a finished or approved item.","");
+  }
   lines.push("FOUNDATIONAL FIELD GUIDES", "");
   for (const [i,g] of GUIDES.entries()) {
     lines.push("=".repeat(72), "FIELD " + (i+1) + " / " + g.id, g.title.toUpperCase(),
@@ -272,7 +313,7 @@ export function renderText() {
   return lines.join("\n") + "\n";
 }
 export function renderJson() {
-  return JSON.stringify({format:"codebound-fieldbook-v1",version:VERSION,warning:WARNING,sources:SOURCES,guides:GUIDES,responseSources:RESPONSE_SOURCES,responsePlans:RESPONSE_PLANS,workshopSources:WORKSHOP_SOURCES,workshopLessons:WORKSHOP_LESSONS,buildSources:BUILD_SOURCES,materialCatalog:MATERIALS,buildSheets:BUILD_SHEETS,repairPatterns:REPAIR_PATTERNS,repairSources:REPAIR_SOURCES},null,2) + "\n";
+  return JSON.stringify({format:"codebound-fieldbook-v1",version:VERSION,warning:WARNING,sources:SOURCES,guides:GUIDES,responseSources:RESPONSE_SOURCES,responsePlans:RESPONSE_PLANS,workshopSources:WORKSHOP_SOURCES,workshopLessons:WORKSHOP_LESSONS,buildSources:BUILD_SOURCES,materialCatalog:MATERIALS,buildSheets:BUILD_SHEETS,repairPatterns:REPAIR_PATTERNS,repairSources:REPAIR_SOURCES,preservationRecords:PRESERVATION_RECORDS,preservationSources:PRESERVATION_SOURCES,measurementRules:MEASUREMENT_RULES},null,2) + "\n";
 }
 export const sha256 = bytes => createHash("sha256").update(bytes).digest("hex");
 function crc32(data) {
@@ -323,6 +364,8 @@ function kitReadme() {
     "fieldbook.txt is plain text. fieldbook.json contains structured records.\n" +
     "All formats include six 72-hour plans, five workshops, six system build sheets, six repair patterns and sixteen field guides.\n" +
     "The ZIP also includes examples/label-holder.scad and docs/REPAIR-WORKSHEET.txt.\n" +
+    "Preservation records, source SVG drawings and editable templates are included.\n" +
+    "preservation-index.json gives SHA-256 for each preservation asset.\n" +
     "site/ contains an offline-capable local HTTP server for the interactive web app.\n" +
     "From inside site/, run: node scripts/serve.mjs, then open http://localhost:4173.\n" +
     "Node.js 20+ is required for this interactive local server; fieldbook.html needs none.\n" +
@@ -350,11 +393,26 @@ export async function buildFieldKit(root=process.cwd(),out=join(root,"dist")) {
   archive["fieldbook.html"]=Buffer.from(renderHtml());
   archive["fieldbook.txt"]=Buffer.from(renderText());
   archive["fieldbook.json"]=Buffer.from(renderJson());
+  const preservationFiles=[...new Set(PRESERVATION_RECORDS.flatMap(record=>record.files))].sort();
+  const preservationIndex={
+    format:PRESERVATION_FORMAT,
+    version:VERSION,
+    records:PRESERVATION_RECORDS.map(record=>({id:record.id,revision:record.revision,files:record.files})),
+    files:preservationFiles.map(path=>{
+      const content=archive["site/"+path];
+      if(!content)throw Error("Missing preservation source in the portable kit: "+path);
+      return {path,bytes:content.length,sha256:sha256(content)};
+    })
+  };
+  // Duplicate preserved source assets at the ZIP root so links in the standalone
+  // fieldbook.html resolve from removable media as well as from the hosted site.
+  for(const path of preservationFiles)archive[path]=archive["site/"+path];
+  archive["preservation-index.json"]=Buffer.from(JSON.stringify(preservationIndex,null,2)+"\n");
   archive["SHA256SUMS.txt"]=Buffer.from(Object.keys(archive).sort()
     .map(name => sha256(archive[name])+"  "+name).join("\n")+"\n");
   const zip=makeZip(archive);
   const digest=sha256(zip);
-  for (const name of ["fieldbook.html","fieldbook.txt","fieldbook.json","SHA256SUMS.txt"])
+  for (const name of ["fieldbook.html","fieldbook.txt","fieldbook.json","preservation-index.json","SHA256SUMS.txt"])
     await writeFile(join(site,name),archive[name]);
   await writeFile(join(site,"codebound-field-kit.zip"),zip);
   await writeFile(join(site,"codebound-field-kit.zip.sha256"),digest+"  codebound-field-kit.zip\n");

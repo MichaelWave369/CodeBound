@@ -70,3 +70,12 @@ No remote synchronization or real-time verification is currently implemented. PW
 - `examples/label-holder.scad` is editable parametric OpenSCAD for a dry tabletop label holder. NIOSH provides 3D printing ventilation and burn risk guidance. Not for structural, electrical, pressure or potable use.
 - `docs/REPAIR-WORKSHEET.txt` supports paper verification and handoff.
 - The fieldkit generator includes six patterns in standalone HTML/plain text/JSON and bundles the OpenSCAD/worksheet sources for offline use. Run tests and a physical/offline smoke test before treating as field-proven.
+
+## v0.7 Knowledge Preservation Library
+
+- The canonical registry is data/preservation.js (five versioned packs); source assets include drawings/*.svg, templates/*.txt, templates/*.csv and the existing OpenSCAD/repair worksheets.
+- src/preservation-core.js supplies a strict local-input checklist, mm/in conversion, search and manifest validation. An all-checked list never confers certification.
+- preservation-ui.js displays offline-searchable packs, drawing previews, file download links, provenance and nonpersistent user checkboxes. No personal data or online fetch is required.
+- The builder includes every source asset in the ZIP and generates preservation-index.json with paths, SHA-256 hashes and byte sizes, inside the ZIP and at the static site root.
+- The standalone HTML/text/JSON fieldbooks contain complete preservation descriptions, measurement policies, source references and checks, with no scripts required to read.
+- tests/preservation.test.js and the portable ZIP tests check registry integrity, source packaging and hashes. These do not substitute for physical inspection or independent engineering review.

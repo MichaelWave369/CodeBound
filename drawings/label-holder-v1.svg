@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 450" role="img" aria-labelledby="t d">
+<title id="t">CodeBound desktop label holder nominal dimensions revision 1.0.0</title>
+<desc id="d">A schematic rectangular card holder 80 mm wide and 40 mm deep with 8 mm height, centered 65 mm long by 2.5 mm wide slot of 5 mm depth. Not to scale.</desc>
+<rect width="900" height="450" fill="#f8faf6"/>
+<g font-family="system-ui,sans-serif" fill="#173927"><text x="50" y="50" font-size="27" font-weight="700">TABLETOP LABEL HOLDER · REV 1.0.0</text><text x="50" y="84" font-size="16">Nominal dimensions in mm · schematic, not to scale</text></g>
+<rect x="145" y="160" width="495" height="199" rx="8" fill="#e5efdf" stroke="#346e45" stroke-width="4"/>
+<rect x="191" y="255" width="403" height="12" fill="#385c42"/>
+<g stroke="#286b40" stroke-width="2" fill="none">
+<path d="M145 117 V151 M640 117 V151 M145 126 H640"/>
+<path d="M110 160 H137 M110 359 H137 M119 160 V359"/>
+<path d="M191 275 V308 M594 275 V308 M191 299 H594"/>
+</g>
+<g font-family="system-ui,sans-serif" font-size="19" fill="#1c5034" text-anchor="middle">
+<text x="394" y="113">80 mm base width</text>
+<text x="94" y="260" transform="rotate(-90 94 260)">40 mm depth</text>
+<text x="393" y="337">65 mm slot length</text>
+</g>
+<g font-family="system-ui,sans-serif" font-size="17" fill="#22432e">
+<text x="658" y="216">Slot width: 2.5 mm</text>
+<text x="658" y="245">Slot depth: 5 mm</text>
+<text x="658" y="274">Base height: 8 mm</text>
+</g>
+<text x="50" y="405" font-family="system-ui,sans-serif" font-size="16" fill="#853d23">NON-LOAD-BEARING · TOLERANCE UNSPECIFIED · TEST PHYSICAL FIT</text>
+</svg>
