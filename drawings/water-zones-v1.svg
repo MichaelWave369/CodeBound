@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 390" role="img" aria-labelledby="t d">
+<title id="t">CodeBound water status labels revision 1.0.0</title>
+<desc id="d">Two large distinct water container zones: source-verified safe under applicable advisories and not verified, do not serve. A label is not a potability test.</desc>
+<rect width="900" height="390" fill="#f8faf4"/>
+<text x="35" y="45" font-family="system-ui" font-size="26" font-weight="700" fill="#25452f">WATER STATUS SEPARATION · REV 1.0.0</text>
+<rect x="35" y="77" width="400" height="210" rx="12" fill="#dcf0df" stroke="#247343" stroke-width="5"/>
+<rect x="465" y="77" width="400" height="210" rx="12" fill="#fff0dd" stroke="#a45c29" stroke-width="5"/>
+<g font-family="system-ui" text-anchor="middle">
+<text x="235" y="139" font-size="28" font-weight="700" fill="#21673b">SOURCE VERIFIED*</text>
+<text x="235" y="196" font-size="20" fill="#315b40">Date + source + local advisory</text>
+<text x="665" y="139" font-size="28" font-weight="700" fill="#993d1f">NOT VERIFIED</text>
+<text x="665" y="196" font-size="23" font-weight="700" fill="#993d1f">DO NOT SERVE</text>
+</g>
+<text x="38" y="327" font-family="system-ui" font-size="16" fill="#344e3c">*A sign cannot establish safe drinking water; follow current official local guidance.</text>
+<text x="38" y="356" font-family="system-ui" font-size="15" fill="#974525">Boiling cannot make chemically contaminated water safe.</text>
+</svg>

@@ -1,7 +1,7 @@
-const CACHE = "codebound-atlas-v6";
+const CACHE = "codebound-atlas-v7";
 const ASSETS = [
   "./", "./index.html", "./styles.css", "./app.js",
-  "./data/guides.js", "./data/scenarios.js", "./scenarios-ui.js", "./data/workshops.js", "./workshop-ui.js", "./data/blueprints.js", "./blueprints-ui.js", "./src/blueprint-core.js", "./data/repairs.js", "./repair-ui.js", "./src/repair-core.js", "./examples/label-holder.scad", "./docs/REPAIR-WORKSHEET.txt", "./src/workshop-core.js", "./src/core.js", "./manifest.webmanifest", "./icon.svg", "./fieldbook.html", "./fieldbook.txt"
+  "./data/guides.js", "./data/scenarios.js", "./scenarios-ui.js", "./data/workshops.js", "./workshop-ui.js", "./data/blueprints.js", "./blueprints-ui.js", "./src/blueprint-core.js", "./data/repairs.js", "./repair-ui.js", "./src/repair-core.js", "./data/preservation.js", "./preservation-ui.js", "./src/preservation-core.js", "./preservation-index.json", "./docs/PRESERVATION-PROTOCOL.md", "./drawings/label-holder-v1.svg", "./drawings/seed-tray-layout-v1.svg", "./drawings/water-zones-v1.svg", "./templates/seed-log-v1.csv", "./templates/notice-v1.txt", "./templates/verification-record-v1.txt", "./examples/label-holder.scad", "./docs/REPAIR-WORKSHEET.txt", "./src/workshop-core.js", "./src/core.js", "./manifest.webmanifest", "./icon.svg", "./fieldbook.html", "./fieldbook.txt"
 ];
 self.addEventListener("install", (event) => {
   event.waitUntil(caches.open(CACHE).then((cache) => cache.addAll(ASSETS)).then(() => self.skipWaiting()));

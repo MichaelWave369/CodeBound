@@ -16,6 +16,7 @@
 - **v0.5:** Add six station blueprints with a combined BOM calculator, safe export, print view and matching offline fieldbook sheets. Independent field verification remains outstanding.
 - **v0.4 Community Workshop:** five low-risk teach-back lessons with component-flow diagrams, materials, safety limits, verified sources and locally exportable practice marks; available in the portable fieldbook.
 - **v0.6:** Six part compatibility/repair patterns, local event ledger, OpenSCAD tabletop stand, paper repair worksheet, and offline exports. Independent field tests remain a release requirement.
+- **v0.7 Knowledge Preservation:** add five versioned reference packs, source drawings, machine-readable checksums, non-certified local-input assessments and NIST unit conventions. Preserve original files rather than only screenshots.
 - Add independent expert review and field-test records.
 
 ## Phase 3: Rebuild

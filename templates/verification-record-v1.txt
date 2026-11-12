@@ -1,0 +1,23 @@
+CODEBOUND / PRESERVATION & MEASUREMENT RECORD / v1.0.0
+
+ASSET / DOCUMENT ID: ___________________________
+REVISION: _____________________________________
+AUTHOR / MAKER: ________________________________
+LICENSE: ______________________________________
+TRUSTED SOURCE: _______________________________
+SOURCE COPY DATE: _____________________________
+SHA-256 (if computed): _________________________
+
+INTENDED LOW-RISK USE: _________________________
+STOP CONDITIONS: ______________________________
+MEASUREMENT NAME: ____________________________
+NOMINAL VALUE WITH UNITS: ______________________
+MEASURED ACTUAL WITH UNITS: ____________________
+TOOL / RESOLUTION / METHOD: ___________________
+APPROVED TOLERANCE OR "UNSPECIFIED": ___________
+OBSERVATION DATE: _____________________________
+FINDING, INCLUDING FAILED TESTS: ______________
+NEXT REVIEW / HANDOFF: ________________________
+
+No invented tolerances or certifications. A checksum detects
+changes to bytes but cannot establish author identity or safety.

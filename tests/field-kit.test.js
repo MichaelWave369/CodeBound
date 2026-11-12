@@ -10,6 +10,8 @@ import { RESPONSE_PLANS } from "../data/scenarios.js";
 import { WORKSHOP_LESSONS } from "../data/workshops.js";
 import { BUILD_SHEETS } from "../data/blueprints.js";
 import { REPAIR_PATTERNS } from "../data/repairs.js";
+import { PRESERVATION_RECORDS } from "../data/preservation.js";
+import {validatePreservationManifest} from "../src/preservation-core.js";
 function extract(zip) {
   const result={}; let pos=0;
   while(pos+30<zip.length && zip.readUInt32LE(pos)===0x04034b50) {
@@ -38,6 +40,7 @@ test("standalone HTML has no scripts, external styles or missing cards",()=>{
   for(const w of WORKSHOP_LESSONS){assert.ok(html.includes('id="workshop-'+w.id+'"'));assert.ok(html.includes(escapeHtml(w.title)));}
   for(const b of BUILD_SHEETS){assert.ok(html.includes('id="blueprint-'+b.id+'"'));assert.ok(html.includes(escapeHtml(b.title)));}
   for(const p of REPAIR_PATTERNS){assert.ok(html.includes('id="repair-'+p.id+'"'));assert.ok(html.includes(escapeHtml(p.title)));}
+  for(const p of PRESERVATION_RECORDS){assert.ok(html.includes('id="preserve-'+p.id+'"'));assert.ok(html.includes(escapeHtml(p.title)));}
   assert.match(html,/<svg/);
 });
 test("plain text and JSON contain guide steps",()=>{
@@ -47,12 +50,14 @@ test("plain text and JSON contain guide steps",()=>{
   assert.equal(json.workshopLessons.length,WORKSHOP_LESSONS.length);
   assert.equal(json.buildSheets.length,BUILD_SHEETS.length);
   assert.equal(json.repairPatterns.length,REPAIR_PATTERNS.length);
+  assert.equal(json.preservationRecords.length,PRESERVATION_RECORDS.length);
   assert.equal(json.format,"codebound-fieldbook-v1");
   for(const g of GUIDES){assert.ok(txt.includes(g.title));for(const s of g.steps)assert.ok(txt.includes(s));}
   for(const p of RESPONSE_PLANS){assert.ok(txt.includes(p.title));for(const s of p.first)assert.ok(txt.includes(s));}
   for(const w of WORKSHOP_LESSONS){assert.ok(txt.includes(w.title));for(const s of w.steps)assert.ok(txt.includes(s));}
   for(const b of BUILD_SHEETS){assert.ok(txt.includes(b.title));for(const s of b.steps)assert.ok(txt.includes(s));}
   for(const p of REPAIR_PATTERNS){assert.ok(txt.includes(p.title));for(const s of p.steps)assert.ok(txt.includes(s));}
+  for(const p of PRESERVATION_RECORDS){assert.ok(txt.includes(p.title));for(const s of p.checks)assert.ok(txt.includes(s));}
 });
 test("ZIP pack prevents traversal",()=>{
   assert.throws(()=>makeZip({"../x":"bad"}),/Unsafe ZIP path/);
@@ -68,8 +73,15 @@ test("ZIP is deterministic, self-contained and its checksums match",async()=>{
     assert.deepEqual(zipA,zipB);
     assert.equal(sha256(zipA),a.digest);
     const files=extract(zipA);
-    for(const name of ["fieldbook.html","fieldbook.txt","fieldbook.json","README.txt","LICENSE.txt","SHA256SUMS.txt","site/index.html","site/app.js","site/scripts/serve.mjs","site/data/scenarios.js","site/scenarios-ui.js","site/data/workshops.js","site/workshop-ui.js","site/src/workshop-core.js","site/data/blueprints.js","site/blueprints-ui.js","site/src/blueprint-core.js","site/data/repairs.js","site/repair-ui.js","site/src/repair-core.js","site/examples/label-holder.scad","site/docs/REPAIR-WORKSHEET.txt"])
+    for(const name of ["fieldbook.html","fieldbook.txt","fieldbook.json","README.txt","LICENSE.txt","SHA256SUMS.txt","site/index.html","site/app.js","site/scripts/serve.mjs","site/data/scenarios.js","site/scenarios-ui.js","site/data/workshops.js","site/workshop-ui.js","site/src/workshop-core.js","site/data/blueprints.js","site/blueprints-ui.js","site/src/blueprint-core.js","site/data/repairs.js","site/repair-ui.js","site/src/repair-core.js","site/examples/label-holder.scad","site/docs/REPAIR-WORKSHEET.txt","site/data/preservation.js","site/preservation-ui.js","site/src/preservation-core.js","preservation-index.json","site/drawings/label-holder-v1.svg","site/templates/notice-v1.txt"])
       assert.ok(files[name],"missing "+name);
+    const index=JSON.parse(files["preservation-index.json"].toString("utf8"));
+    assert.equal(validatePreservationManifest(index,PRESERVATION_RECORDS),true);
+    for(const file of index.files){
+      assert.ok(files["site/"+file.path],"missing preserved asset "+file.path);
+      assert.equal(files["site/"+file.path].length,file.bytes);
+      assert.equal(sha256(files["site/"+file.path]),file.sha256,"preserved asset changed: "+file.path);
+    }
     for(const line of files["SHA256SUMS.txt"].toString().trim().split("\n")){
       const m=line.match(/^([a-f0-9]{64})  (.+)$/);
       assert.ok(m);assert.ok(files[m[2]]);assert.equal(sha256(files[m[2]]),m[1]);

@@ -5,7 +5,7 @@
 
 **CodeBound** is a free, practical field library for neighbors, responders and makerspaces preparing for or recovering from infrastructure disruption. This is an open resilience project, **not a prediction of collapse**.
 
-## What's included in v0.6
+## What's included in v0.7
 
 - 16 foundational, structured system cards across water, sanitation, food, shelter, energy, communications, health, repair, education, and community.
 - **Six 72-hour response plans** for water disruption, power outages, unsafe food storage, communications loss, shelter displacement and voluntary neighborhood coordination. Each has timed checkpoints, acceptance tests, escalation warnings and source provenance.
@@ -14,6 +14,9 @@
 - **Local materials calculator:** select station quantities (0–25 per design, up to 100 total), aggregate starter BOMs, export spreadsheet-safe CSV or print a checklist. Material quantities are planning estimates, not population capacity or engineering certification.
 - **Six Repair & Reproduction patterns**: nonstructural fasteners, parametric printed desktop labels, commercially rated USB cable replacement, hand-tool quarantine, nursery tray inserts, and nonfood dry-bin closure inspection.
 - **Maintenance ledger**: local-only event log, optional user-defined review dates, JSON import/export and spreadsheet-safe CSV. It retains quarantine history without treating a later inspection as automatic clearance.
+- **Five Knowledge Preservation packs**: label holder, seed recording grid, water source/status sign, public notice, and measured replacement-part worksheet. Each has revision, provenance, source files, measurement policy, safety limits and a local-input checklist.
+- **Versioned SVG drawings and editable templates**: packaged with the HTML/text/JSON guides. A generated `preservation-index.json` inventories each source file with SHA-256 and byte length.
+- **Unit converter**: millimeters and inches via the exact 25.4 mm/in factor. Local-input checklists are self-reported and never certify a build.
 - **Reusable source files**: OpenSCAD parametric tabletop label stand and printable repair worksheet, included with the offline ZIP.
 - Optional local workshop practice log with export and reset. Practice marks are **not certifications**; no personal names are recorded.
 - Searchable, accessible, printable mobile-friendly web atlas with dependencies, materials, ordered steps, acceptance checks, cautions, and links to primary sources.
@@ -47,6 +50,8 @@ npm run dev
 The local interactive site runs at `http://localhost:4173`. The portable output is in `dist/site/`. Double-click `dist/site/fieldbook.html` or `dist/site/codebound-field-kit.zip` to distribute the fieldbook.
 
 To run the interactive version from the extracted ZIP entirely offline, open a terminal in its `site/` directory and run `node scripts/serve.mjs`, then visit `http://localhost:4173`. Node.js 20+ must already be installed. The server binds only to `127.0.0.1`, not to the LAN.
+
+**Preservation checks:** Open the Preserve section to search versioned sources, record which tools/materials are locally accessible, and use the unit converter. All-checkmarked means **inputs present, physical trial unverified**. SHA-256 checks file integrity, not authenticity or technical safety. Read [the preservation protocol](docs/PRESERVATION-PROTOCOL.md).
 
 **Repair & reproduction:** This module covers noncritical parts and documented manufacturer-compatible replacements only. Fit is not certification, and logged maintenance is not a return-to-service approval. The standalone fieldbook contains each repair pattern, while the ZIP also includes its OpenSCAD and print worksheet source files.
 

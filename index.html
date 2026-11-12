@@ -19,7 +19,7 @@
       <span class="brand-stack"><strong>CODEBOUND</strong><small>THE COMMONS ATLAS</small></span>
     </a>
     <nav aria-label="Main navigation" class="main-nav">
-      <a href="#response">First 72 hours</a><a href="#workshop">Workshop</a><a href="#blueprints">Build sheets</a><a href="#repair">Repair desk</a><a href="#atlas">Field atlas</a><a href="#field-kit">Portable kit</a><a href="#workbench">Workbench</a><a href="#protocol">The protocol</a>
+      <a href="#response">First 72 hours</a><a href="#workshop">Workshop</a><a href="#blueprints">Build sheets</a><a href="#repair">Repair desk</a><a href="#preservation">Preserve</a><a href="#atlas">Field atlas</a><a href="#field-kit">Portable kit</a><a href="#workbench">Workbench</a><a href="#protocol">The protocol</a>
     </nav>
     <span class="network-pill" id="network-status" aria-live="polite">LOCAL FIRST</span>
   </header>
@@ -27,7 +27,7 @@
   <main id="main">
     <section class="hero" aria-labelledby="hero-title">
       <div class="hero-copy">
-        <div class="eyebrow"><span class="pulse-dot"></span> OPEN KNOWLEDGE SYSTEM / EDITION 0.6</div>
+        <div class="eyebrow"><span class="pulse-dot"></span> OPEN KNOWLEDGE SYSTEM / EDITION 0.7</div>
         <h1 id="hero-title">KNOWLEDGE<br>THAT <em>SURVIVES</em><br>THE NETWORK.</h1>
         <p>A field atlas for rebuilding the essentials. Water. Food. Shelter. Power. Communication. Community. No gatekeepers. No account. Practical instructions, verified where possible, with safety limits where it matters.</p>
         <div class="hero-actions">
@@ -177,6 +177,42 @@
       </section>
     </section>
 
+    <section class="preservation-section" id="preservation" aria-labelledby="preservation-title">
+      <div class="section-intro">
+        <span class="kicker">07 / KNOWLEDGE PRESERVATION</span>
+        <h2 id="preservation-title">Keep the original. Keep the evidence.</h2>
+        <p>Five versioned, source-editable reference packs with drawings, plain-text/CSV worksheets, declared measurements, provenance, known limits and verification checks. Search them offline and examine the sources before attempting a copy.</p>
+      </div>
+      <div class="preserve-toolbar">
+        <label for="preservation-search">Search preserved records
+          <input id="preservation-search" maxlength="140" placeholder="Try: label, seed, repair, water">
+        </label>
+        <div>
+          <strong id="preservation-match-count">5 / 5 PACKS MATCH</strong>
+          <small id="preserve-status">0 / 5 INPUT SETS SELF-REPORTED COMPLETE</small>
+        </div>
+      </div>
+      <div id="preservation-cards" class="preservation-grid"></div>
+      <div class="preserve-bottom">
+        <section aria-labelledby="measurement-title">
+          <h3 id="measurement-title">Five rules for measurements and preservation</h3>
+          <ol id="measurement-rules"></ol>
+        </section>
+        <section class="preserve-converter" aria-labelledby="preservation-units-title">
+          <h3 id="preservation-units-title">Length conversion</h3>
+          <p>Convert millimeters and inches without implying a measurement tolerance.</p>
+          <div class="preserve-convert-row">
+            <input type="number" id="preservation-input" step="any" min="0" value="25.4" aria-label="Length value">
+            <select id="preservation-from" aria-label="Original length unit"><option value="mm">mm</option><option value="in">in</option></select>
+            <button type="button" id="preservation-convert">Convert</button>
+          </div>
+          <p id="preservation-result" role="status" aria-live="polite"></p>
+          <p><a href="./preservation-index.json">File integrity manifest (SHA-256)</a> · <a href="./docs/PRESERVATION-PROTOCOL.md">Preservation protocol</a></p>
+          <p>Checksums show byte integrity, not authenticity, safety or independent review.</p>
+        </section>
+      </div>
+    </section>
+
     <section class="atlas-section" id="atlas" aria-labelledby="atlas-title">
       <div class="section-intro flex-heading"><div><span class="kicker">02 / THE FIELD ATLAS</span><h2 id="atlas-title">Open instructions. Real checks.</h2><p>Every card tells you what you need, what to do, how to check your work, and when to get expert help.</p></div><div class="atlas-count" id="results-count" role="status" aria-live="polite"></div></div>
       <div class="filter-bar">
@@ -242,6 +278,7 @@
   <script type="module" src="./workshop-ui.js"></script>
   <script type="module" src="./blueprints-ui.js"></script>
   <script type="module" src="./repair-ui.js"></script>
+  <script type="module" src="./preservation-ui.js"></script>
   <noscript><p class="no-js">JavaScript is required for interactive filters and tools. The source instructions are available in data/guides.js and can be printed or preserved from the repository.</p></noscript>
 </body>
 </html>

@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 750 450" role="img" aria-labelledby="t d">
+<title id="t">CodeBound example twelve-cell seed observation grid v1.0.0</title>
+<desc id="d">Three rows of four labeled cells A1 to C4. Grid is a recordkeeping example, not a standard physical tray size.</desc>
+<rect width="750" height="450" fill="#f8faf4"/>
+<text x="40" y="55" font-family="system-ui" font-weight="700" font-size="26" fill="#1b4831">SEED OBSERVATION GRID · REV 1.0.0</text>
+<text x="40" y="88" font-family="system-ui" font-size="16" fill="#345643">Example cell identifiers. NOT a tray dimension specification.</text>
+<g fill="#e2eed9" stroke="#42754c" stroke-width="3">
+<rect x="88" y="120" width="128" height="75" rx="13"/><rect x="233" y="120" width="128" height="75" rx="13"/><rect x="378" y="120" width="128" height="75" rx="13"/><rect x="523" y="120" width="128" height="75" rx="13"/>
+<rect x="88" y="205" width="128" height="75" rx="13"/><rect x="233" y="205" width="128" height="75" rx="13"/><rect x="378" y="205" width="128" height="75" rx="13"/><rect x="523" y="205" width="128" height="75" rx="13"/>
+<rect x="88" y="290" width="128" height="75" rx="13"/><rect x="233" y="290" width="128" height="75" rx="13"/><rect x="378" y="290" width="128" height="75" rx="13"/><rect x="523" y="290" width="128" height="75" rx="13"/>
+</g>
+<g font-family="ui-monospace,monospace" font-size="23" text-anchor="middle" fill="#205036">
+<text x="152" y="167">A1</text><text x="297" y="167">A2</text><text x="442" y="167">A3</text><text x="587" y="167">A4</text>
+<text x="152" y="252">B1</text><text x="297" y="252">B2</text><text x="442" y="252">B3</text><text x="587" y="252">B4</text>
+<text x="152" y="337">C1</text><text x="297" y="337">C2</text><text x="442" y="337">C3</text><text x="587" y="337">C4</text>
+</g>
+<text x="40" y="414" font-family="system-ui" font-size="16" fill="#284b32">Record seed variety, date, sow count, emergence count and conditions.</text>
+</svg>
