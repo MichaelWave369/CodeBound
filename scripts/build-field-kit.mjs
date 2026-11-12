@@ -6,11 +6,13 @@ import { createHash } from "node:crypto";
 import { deflateRawSync } from "node:zlib";
 import { GUIDES, SOURCES } from "../data/guides.js";
 import { RESPONSE_PLANS, RESPONSE_SOURCES } from "../data/scenarios.js";
+import { WORKSHOP_LESSONS, WORKSHOP_SOURCES } from "../data/workshops.js";
+import { renderWorkshopDiagram } from "../src/workshop-core.js";
 
-export const VERSION = "0.3.0";
+export const VERSION = "0.4.0";
 const SITE_FILES = [
   "index.html", "styles.css", "app.js", "service-worker.js",
-  "manifest.webmanifest", "icon.svg", "data/guides.js", "data/scenarios.js", "scenarios-ui.js", "src/core.js", "scripts/serve.mjs"
+  "manifest.webmanifest", "icon.svg", "data/guides.js", "data/scenarios.js", "scenarios-ui.js", "data/workshops.js", "workshop-ui.js", "src/core.js", "src/workshop-core.js", "scripts/serve.mjs"
 ];
 const WARNING = "Starting points only, NOT certified field procedures. Follow local emergency instructions and qualified guidance. External references are links, not cached documents.";
 const HTML_CSS = "body{max-width:850px;margin:0 auto;padding:2rem 1.25rem;background:#f8faf6;color:#213329;font:16px/1.6 system-ui,sans-serif}" +
@@ -19,7 +21,7 @@ const HTML_CSS = "body{max-width:850px;margin:0 auto;padding:2rem 1.25rem;backgr
   "header{padding:1.5rem;background:#e6eee1;border:2px solid #31513f}" +
   ".warning{border-left:4px solid #aa5f2c;padding:.5rem 1rem;background:#fff3e5}" +
   ".guide{padding-top:1.5rem;border-top:2px solid #31513f;break-before:page}" +
-  "li{margin:.4rem 0;overflow-wrap:anywhere}.meta,.review{font:12px/1.5 ui-monospace,monospace}" +
+  "li{margin:.4rem 0;overflow-wrap:anywhere}.diagram svg{width:100%;height:auto}.diagram{margin:1rem 0}.diagram figcaption{font-size:.85rem}.meta,.review{font:12px/1.5 ui-monospace,monospace}" +
   "@media print{@page{margin:15mm}body{max-width:none;padding:0;background:white;color:black;font-size:10pt}" +
   "header,.warning{background:white}.guide{break-before:page}h2,h3{break-after:avoid}a{color:black}}";
 
@@ -77,12 +79,35 @@ export function renderHtml() {
       "<h3>Official online sources</h3><ul>" + sourceList + "</ul>" +
       '<p class="review">Planning times are prompts, not emergency deadlines. Not field-certified.</p></section>';
   }).join("\n");
+  const workshopCards = WORKSHOP_LESSONS.map((l,i)=>{
+    const group=(title,items,ordered=false)=>
+      "<h3>"+title+"</h3>"+escapeList(items,ordered?"ol":"ul");
+    const sourceList=l.sourceIds.map(id=>{
+      const s=WORKSHOP_SOURCES[id];
+      if(!s)throw Error("Unknown workshop source "+id);
+      return '<li><a href="'+escapeHtml(s.url)+'">'+escapeHtml(s.title)+"</a> (online only)</li>";
+    }).join("");
+    return '<section class="guide" id="workshop-'+escapeHtml(l.id)+'">' +
+      '<p class="meta">WORKSHOP '+(i+1)+" / "+escapeHtml(l.category)+" / "+escapeHtml(l.review)+"</p>"+
+      "<h2>"+escapeHtml(l.title)+"</h2><p>"+escapeHtml(l.summary)+"</p>"+
+      '<p class="meta">TIME: '+escapeHtml(l.effort)+" | SKILL: "+escapeHtml(l.skill)+"</p>"+
+      '<figure class="diagram">'+renderWorkshopDiagram(l.diagram)+"<figcaption>"+escapeHtml(l.diagram.caption)+"</figcaption></figure>"+
+      group("Materials and components",l.materials)+
+      group("Build and practice",l.steps,true)+
+      group("Acceptance checks",l.checks)+
+      '<div class="warning">'+group("Stop conditions",l.stop)+"</div>"+
+      group("Maintenance",l.maintenance)+
+      "<p><strong>Teach-back:</strong> "+escapeHtml(l.teachBack)+"</p>"+
+      group("Related atlas guides",l.guideIds.map(dependency))+
+      "<h3>Sources (online only)</h3><ul>"+sourceList+"</ul>"+
+      '<p class="review">Practice draft only; not certification or an approved technical installation.</p></section>';
+  }).join("\n");
   return '<!doctype html><html lang="en"><head><meta charset="utf-8">' +
     '<meta name="viewport" content="width=device-width, initial-scale=1">' +
     '<title>CodeBound Standalone Fieldbook</title><style>' + HTML_CSS + "</style></head><body>" +
     "<header><small>CODEBOUND / OFFLINE FIELD KIT / " + VERSION + "</small>" +
     "<h1>Knowledge that survives the network.</h1><p>All " + GUIDES.length +
-    " guides and " + RESPONSE_PLANS.length + " 72-hour response cards inside one self-contained HTML file. Open directly from a USB drive; no server, JavaScript or network.</p></header>" +
+    " guides, " + RESPONSE_PLANS.length + " 72-hour response cards and " + WORKSHOP_LESSONS.length + " workshop lessons inside one self-contained HTML file. Open directly from a USB drive; no server, JavaScript or network.</p></header>" +
     '<div class="warning"><strong>SAFETY:</strong> ' + escapeHtml(WARNING) + "</div>" +
     '<section><h2>First 72 hours: essential checks</h2><ol>' +
     "<li>Assess immediate danger and reach available emergency services. Avoid unsafe buildings and routes.</li>" +
@@ -94,6 +119,9 @@ export function renderHtml() {
     '<nav id="response-contents" aria-label="72-hour response cards"><h2>72-hour scenario plans</h2><ol>' +
     RESPONSE_PLANS.map(p => '<li><a href="#response-' + escapeHtml(p.id) + '">' + escapeHtml(p.title) + '</a></li>').join("") +
     '</ol></nav>' + responses +
+    '<nav id="workshop-contents" aria-label="Community workshop lessons"><h2>Community workshop lessons</h2><ol>' +
+    WORKSHOP_LESSONS.map(l => '<li><a href="#workshop-' + escapeHtml(l.id) + '">' + escapeHtml(l.title) + '</a></li>').join("") +
+    '</ol></nav>' + workshopCards +
     '<nav id="contents" aria-label="Field guide contents"><h2>Field guide contents</h2><ol>' + index + "</ol></nav>" +
     cards + '<footer><p>CodeBound contributors / MIT. Referenced third-party works retain their rights.</p></footer></body></html>\n';
 }
@@ -124,6 +152,22 @@ export function renderText() {
     section("SOURCE LINKS (ONLINE ONLY)",p.sourceIds.map(key => RESPONSE_SOURCES[key].title + ": " + RESPONSE_SOURCES[key].url));
     lines.push("Not field-certified. Follow locally issued advice and real-time alerts.", "");
   }
+  lines.push("COMMUNITY WORKSHOP INDEX",...WORKSHOP_LESSONS.map(l=>l.title),"");
+  for(const [i,l] of WORKSHOP_LESSONS.entries()) {
+    lines.push("=".repeat(72),"WORKSHOP "+(i+1)+" / "+l.id,l.title.toUpperCase(),
+      "Skill: "+l.skill+"; Time: "+l.effort+"; Review: "+l.review,"",l.summary,"",
+      "CONCEPTUAL DIAGRAM: "+l.diagram.nodes.map(n=>n.title+" ("+n.detail+")").join(" -> "),
+      "Diagram note: "+l.diagram.caption,"");
+    section("MATERIALS",l.materials);
+    section("BUILD AND PRACTICE",l.steps);
+    section("ACCEPTANCE CHECKS",l.checks);
+    section("STOP CONDITIONS",l.stop);
+    section("MAINTENANCE",l.maintenance);
+    lines.push("TEACH-BACK: "+l.teachBack,"");
+    section("RELATED ATLAS GUIDES",l.guideIds.map(dependency));
+    section("SOURCE LINKS (ONLINE ONLY)",l.sourceIds.map(id=>WORKSHOP_SOURCES[id].title+": "+WORKSHOP_SOURCES[id].url));
+    lines.push("Practice draft only, not field certification.","");
+  }
   lines.push("FOUNDATIONAL FIELD GUIDES", "");
   for (const [i,g] of GUIDES.entries()) {
     lines.push("=".repeat(72), "FIELD " + (i+1) + " / " + g.id, g.title.toUpperCase(),
@@ -142,7 +186,7 @@ export function renderText() {
   return lines.join("\n") + "\n";
 }
 export function renderJson() {
-  return JSON.stringify({format:"codebound-fieldbook-v1",version:VERSION,warning:WARNING,sources:SOURCES,guides:GUIDES,responseSources:RESPONSE_SOURCES,responsePlans:RESPONSE_PLANS},null,2) + "\n";
+  return JSON.stringify({format:"codebound-fieldbook-v1",version:VERSION,warning:WARNING,sources:SOURCES,guides:GUIDES,responseSources:RESPONSE_SOURCES,responsePlans:RESPONSE_PLANS,workshopSources:WORKSHOP_SOURCES,workshopLessons:WORKSHOP_LESSONS},null,2) + "\n";
 }
 export const sha256 = bytes => createHash("sha256").update(bytes).digest("hex");
 function crc32(data) {
@@ -191,7 +235,7 @@ function kitReadme() {
   return "CODEBOUND PORTABLE KIT " + VERSION + "\n\n" +
     "OPEN fieldbook.html by double-clicking, without a server or network.\n" +
     "fieldbook.txt is plain text. fieldbook.json contains structured records.\n" +
-    "All formats include six 72-hour scenario plans and sixteen foundational guides.\n" +
+    "All formats include six 72-hour plans, five workshops and sixteen field guides.\n" +
     "site/ contains an offline-capable local HTTP server for the interactive web app.\n" +
     "From inside site/, run: node scripts/serve.mjs, then open http://localhost:4173.\n" +
     "Node.js 20+ is required for this interactive local server; fieldbook.html needs none.\n" +

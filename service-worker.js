@@ -1,7 +1,7 @@
-const CACHE = "codebound-atlas-v3";
+const CACHE = "codebound-atlas-v4";
 const ASSETS = [
   "./", "./index.html", "./styles.css", "./app.js",
-  "./data/guides.js", "./data/scenarios.js", "./scenarios-ui.js", "./src/core.js", "./manifest.webmanifest", "./icon.svg", "./fieldbook.html", "./fieldbook.txt"
+  "./data/guides.js", "./data/scenarios.js", "./scenarios-ui.js", "./data/workshops.js", "./workshop-ui.js", "./src/workshop-core.js", "./src/core.js", "./manifest.webmanifest", "./icon.svg", "./fieldbook.html", "./fieldbook.txt"
 ];
 self.addEventListener("install", (event) => {
   event.waitUntil(caches.open(CACHE).then((cache) => cache.addAll(ASSETS)).then(() => self.skipWaiting()));

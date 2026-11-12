@@ -45,3 +45,11 @@ No remote synchronization or real-time verification is currently implemented. PW
 - `scenarios-ui.js`: static-source, text-node-only DOM rendering with native `details` and `summary` accessibility controls.
 - `scripts/build-field-kit.mjs`: automatically includes the same plans in the standalone HTML, plain text, JSON, and portable ZIP. No manual copying of advice into separate publications.
 - `tests/scenarios.test.js`: checks uniqueness, cross-references, minimum safety criteria and provenance; `tests/field-kit.test.js` confirms all plans are in every export format.
+
+## v0.4 Community Workshop
+
+- `data/workshops.js` is the shared content source for five materials-based lessons and their cited sources.
+- `src/workshop-core.js` generates accessible, safe, three-stage conceptual SVG diagrams and validates a minimal lesson-practice log. Diagrams are not technical wiring schematics.
+- `workshop-ui.js` renders native expandable lessons and stores optional practice marks only in browser localStorage. The JSON export includes only lesson IDs and practice timestamps, not names, locations or health details. A mark is not certification.
+- `scripts/build-field-kit.mjs` includes all workshop text, SVG and sources in standalone HTML, plain text and JSON, with no external runtime dependency.
+- `tests/workshops.test.js` verifies content completeness, cross-references, escaped diagrams and practice-log validation. Portable-kit tests check representation in every format.

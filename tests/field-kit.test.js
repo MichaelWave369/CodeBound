@@ -7,6 +7,7 @@ import {inflateRawSync} from "node:zlib";
 import {buildFieldKit,escapeHtml,renderHtml,renderText,renderJson,makeZip,sha256} from "../scripts/build-field-kit.mjs";
 import {GUIDES} from "../data/guides.js";
 import { RESPONSE_PLANS } from "../data/scenarios.js";
+import { WORKSHOP_LESSONS } from "../data/workshops.js";
 function extract(zip) {
   const result={}; let pos=0;
   while(pos+30<zip.length && zip.readUInt32LE(pos)===0x04034b50) {
@@ -32,14 +33,18 @@ test("standalone HTML has no scripts, external styles or missing cards",()=>{
   assert.equal(escapeHtml('<&"'),"&lt;&amp;&quot;");
   assert.match(html,/first 72 hours/i);
   for(const p of RESPONSE_PLANS){assert.ok(html.includes('id="response-'+p.id+'"'));assert.ok(html.includes(escapeHtml(p.title)));}
+  for(const w of WORKSHOP_LESSONS){assert.ok(html.includes('id="workshop-'+w.id+'"'));assert.ok(html.includes(escapeHtml(w.title)));}
+  assert.match(html,/<svg/);
 });
 test("plain text and JSON contain guide steps",()=>{
   const txt=renderText(), json=JSON.parse(renderJson());
   assert.equal(json.guides.length,GUIDES.length);
   assert.equal(json.responsePlans.length,RESPONSE_PLANS.length);
+  assert.equal(json.workshopLessons.length,WORKSHOP_LESSONS.length);
   assert.equal(json.format,"codebound-fieldbook-v1");
   for(const g of GUIDES){assert.ok(txt.includes(g.title));for(const s of g.steps)assert.ok(txt.includes(s));}
   for(const p of RESPONSE_PLANS){assert.ok(txt.includes(p.title));for(const s of p.first)assert.ok(txt.includes(s));}
+  for(const w of WORKSHOP_LESSONS){assert.ok(txt.includes(w.title));for(const s of w.steps)assert.ok(txt.includes(s));}
 });
 test("ZIP pack prevents traversal",()=>{
   assert.throws(()=>makeZip({"../x":"bad"}),/Unsafe ZIP path/);
@@ -55,7 +60,7 @@ test("ZIP is deterministic, self-contained and its checksums match",async()=>{
     assert.deepEqual(zipA,zipB);
     assert.equal(sha256(zipA),a.digest);
     const files=extract(zipA);
-    for(const name of ["fieldbook.html","fieldbook.txt","fieldbook.json","README.txt","LICENSE.txt","SHA256SUMS.txt","site/index.html","site/app.js","site/scripts/serve.mjs","site/data/scenarios.js","site/scenarios-ui.js"])
+    for(const name of ["fieldbook.html","fieldbook.txt","fieldbook.json","README.txt","LICENSE.txt","SHA256SUMS.txt","site/index.html","site/app.js","site/scripts/serve.mjs","site/data/scenarios.js","site/scenarios-ui.js","site/data/workshops.js","site/workshop-ui.js","site/src/workshop-core.js"])
       assert.ok(files[name],"missing "+name);
     for(const line of files["SHA256SUMS.txt"].toString().trim().split("\n")){
       const m=line.match(/^([a-f0-9]{64})  (.+)$/);
