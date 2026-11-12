@@ -6,6 +6,7 @@ export const REPAIR_SOURCES={
   osha_guide:{title:"OSHA: Hand and power tools guidance (OSHA 3080)",url:"https://www.osha.gov/sites/default/files/publications/OSHA3080.pdf"},
   niosh_print:{title:"NIOSH: Approaches to safe 3D printing",url:"https://www.cdc.gov/niosh/docs/2024-103/"},
   niosh_guide:{title:"NIOSH: Safe 3D printing for everyone",url:"https://www.cdc.gov/niosh/bulletin/2024/safe-3d-printing.html"},
+  umn_seeds:{title:"University of Minnesota Extension: Starting seeds indoors",url:"https://extension.umn.edu/garden-and-home/yard-and-garden/gardening-in-minnesota/starting-seeds-indoors"},
   node_http:{title:"Node.js: HTTP server reference",url:"https://nodejs.org/api/http.html"}
 };
 export const REPAIR_PATTERNS=[
@@ -117,7 +118,7 @@ export const REPAIR_PATTERNS=[
       allowed:"Matching purpose-made tray insert tested empty with controlled water.",
       forbidden:"Unknown contaminated plastic, pressure or heat use, unstable stand or obstructed drainage."},
     teachBack:"Record five dimensions/features and demonstrate the water catch test.",
-    guides:["growing-food","repair-library"],blueprints:["seed-observation"],sources:["osha_tools"]
+    guides:["growing-food","repair-library"],blueprints:["seed-observation"],sources:["osha_tools","umn_seeds"]
   },
   {
     id:"dry-bin-seal-check",title:"Inspect a non-food dry storage bin lid and seal",category:"Storage",effort:"20–45 min",review:"Community draft",
