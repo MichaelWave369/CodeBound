@@ -404,6 +404,9 @@ export async function buildFieldKit(root=process.cwd(),out=join(root,"dist")) {
       return {path,bytes:content.length,sha256:sha256(content)};
     })
   };
+  // Duplicate preserved source assets at the ZIP root so links in the standalone
+  // fieldbook.html resolve from removable media as well as from the hosted site.
+  for(const path of preservationFiles)archive[path]=archive["site/"+path];
   archive["preservation-index.json"]=Buffer.from(JSON.stringify(preservationIndex,null,2)+"\n");
   archive["SHA256SUMS.txt"]=Buffer.from(Object.keys(archive).sort()
     .map(name => sha256(archive[name])+"  "+name).join("\n")+"\n");
