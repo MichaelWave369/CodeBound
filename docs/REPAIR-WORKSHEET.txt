@@ -1,0 +1,44 @@
+CODEBOUND / REPAIR-AND-REPRODUCTION DESK
+Version 0.6 — printable offline worksheet
+
+ASSET TAG (non-personal): _________________________________________
+Date (YYYY-MM-DD): ____________________
+Repair pattern / guide ID: _________________________________________
+
+Purpose and duty (noncritical): ____________________________________
+Observed condition (describe, don't diagnose): ______________________
+___________________________________________________________________
+
+PART IDENTIFICATION (use "UNKNOWN" when unknown)
+Manufacturer/model: _______________________________________________
+Original part number: ______________________________________________
+Measurements AND UNITS: __________________________________________
+Material/grade/ratings: ____________________________________________
+Compatibility evidence (source, manual, standard): __________________
+___________________________________________________________________
+Unknown compatibility or safety-critical use? [ ] YES  [ ] NO
+If yes, quarantine and refer to qualified help. Do not improvise.
+
+DECISION
+[ ] Inspection recorded (not a safety certification)
+[ ] Quarantined / DO NOT USE
+[ ] Manufacturer-approved replacement fitted by qualified person
+[ ] Retired
+Follow-up review DATE (locally chosen): ____________________________
+
+OBSERVATION / ACCEPTANCE CHECKS
+1. _________________________________________________________________
+2. _________________________________________________________________
+3. _________________________________________________________________
+
+HANDOFF
+Documentation location: ___________________________________________
+Known limits: ____________________________________________________
+Next owner/role (non-sensitive): ___________________________________
+Independent review required? [ ] Yes [ ] No
+
+IMPORTANT: a filled form does not make any item safe. Do not
+substitute parts in structural, mains electrical, medical, lifting,
+braking, food/water contact, pressure, or other safety-rated systems
+without qualified verification. Do not put personal or medical data
+into public logs.

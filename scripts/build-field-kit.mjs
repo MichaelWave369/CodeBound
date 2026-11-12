@@ -8,12 +8,13 @@ import { GUIDES, SOURCES } from "../data/guides.js";
 import { RESPONSE_PLANS, RESPONSE_SOURCES } from "../data/scenarios.js";
 import { WORKSHOP_LESSONS, WORKSHOP_SOURCES } from "../data/workshops.js";
 import { BUILD_SHEETS, BUILD_SOURCES, MATERIALS } from "../data/blueprints.js";
+import {REPAIR_PATTERNS,REPAIR_SOURCES} from "../data/repairs.js";
 import { renderWorkshopDiagram } from "../src/workshop-core.js";
 
-export const VERSION = "0.5.0";
+export const VERSION = "0.6.0";
 const SITE_FILES = [
   "index.html", "styles.css", "app.js", "service-worker.js",
-  "manifest.webmanifest", "icon.svg", "data/guides.js", "data/scenarios.js", "scenarios-ui.js", "data/workshops.js", "workshop-ui.js", "data/blueprints.js", "blueprints-ui.js", "src/blueprint-core.js", "src/core.js", "src/workshop-core.js", "scripts/serve.mjs"
+  "manifest.webmanifest", "icon.svg", "data/guides.js", "data/scenarios.js", "scenarios-ui.js", "data/workshops.js", "workshop-ui.js", "data/blueprints.js", "blueprints-ui.js", "src/blueprint-core.js", "data/repairs.js", "repair-ui.js", "src/repair-core.js", "examples/label-holder.scad", "docs/REPAIR-WORKSHEET.txt", "src/core.js", "src/workshop-core.js", "scripts/serve.mjs"
 ];
 const WARNING = "Starting points only, NOT certified field procedures. Follow local emergency instructions and qualified guidance. External references are links, not cached documents.";
 const HTML_CSS = "body{max-width:850px;margin:0 auto;padding:2rem 1.25rem;background:#f8faf6;color:#213329;font:16px/1.6 system-ui,sans-serif}" +
@@ -125,12 +126,34 @@ export function renderHtml() {
       "<h3>Source references (online only)</h3><ul>"+sources+"</ul>"+
       '<p class="review">Community starter design only. Quantities are not population capacity or technical certification.</p></section>';
   }).join("\n");
+  const repairCards=REPAIR_PATTERNS.map((p,i)=>{
+    const group=(name,arr,ordered=false)=>"<h3>"+escapeHtml(name)+"</h3>"+escapeList(arr,ordered?"ol":"ul");
+    const links=p.sources.map(id=>{
+      const s=REPAIR_SOURCES[id];
+      if(!s)throw Error("Unknown repair source: "+id);
+      return '<li><a href="'+escapeHtml(s.url)+'">'+escapeHtml(s.title)+'</a> (online only)</li>';
+    }).join("");
+    return '<section class="guide" id="repair-'+escapeHtml(p.id)+'">'+
+      '<p class="meta">REPAIR PATTERN '+(i+1)+" / "+escapeHtml(p.category)+" / "+escapeHtml(p.review)+"</p>"+
+      "<h2>"+escapeHtml(p.title)+"</h2><p>"+escapeHtml(p.summary)+"</p>"+
+      "<p><strong>Scope:</strong> "+escapeHtml(p.scope)+"</p>"+
+      "<h3>Part compatibility</h3>"+
+      "<p>MEASURE: "+escapeHtml(p.compatibility.measure)+"</p>"+
+      "<p>ONLY IF: "+escapeHtml(p.compatibility.allowed)+"</p>"+
+      "<p>NOT IF: "+escapeHtml(p.compatibility.forbidden)+"</p>"+
+      group("Tools / parts",p.parts)+group("Procedure",p.steps,true)+
+      group("Acceptance checks",p.checks)+'<div class="warning">'+group("Stop / quarantine",p.stop)+"</div>"+
+      group("Maintenance and records",p.care)+"<p><strong>Teach-back:</strong> "+escapeHtml(p.teachBack)+"</p>"+
+      group("Related guides",p.guides.map(dependency))+"<h3>Sources (online only)</h3><ul>"+links+"</ul>"+
+      (p.id==="printable-sign-holder"?"<p>OpenSCAD source: examples/label-holder.scad included in the portable archive.</p>":"")+
+      '<p class="review">Community draft only. Fit alone is not approval or certification.</p></section>';
+  }).join("\n");
   return '<!doctype html><html lang="en"><head><meta charset="utf-8">' +
     '<meta name="viewport" content="width=device-width, initial-scale=1">' +
     '<title>CodeBound Standalone Fieldbook</title><style>' + HTML_CSS + "</style></head><body>" +
     "<header><small>CODEBOUND / OFFLINE FIELD KIT / " + VERSION + "</small>" +
     "<h1>Knowledge that survives the network.</h1><p>All " + GUIDES.length +
-    " guides, " + RESPONSE_PLANS.length + " 72-hour response cards, " + WORKSHOP_LESSONS.length + " workshops and " + BUILD_SHEETS.length + " starter system blueprints inside one self-contained HTML file. Open directly from a USB drive; no server, JavaScript or network.</p></header>" +
+    " guides, " + RESPONSE_PLANS.length + " 72-hour response cards, " + WORKSHOP_LESSONS.length + " workshops and " + BUILD_SHEETS.length + " starter system blueprints plus " + REPAIR_PATTERNS.length + " repair patterns inside one self-contained HTML file. Open directly from a USB drive; no server, JavaScript or network.</p></header>" +
     '<div class="warning"><strong>SAFETY:</strong> ' + escapeHtml(WARNING) + "</div>" +
     '<section><h2>First 72 hours: essential checks</h2><ol>' +
     "<li>Assess immediate danger and reach available emergency services. Avoid unsafe buildings and routes.</li>" +
@@ -148,6 +171,9 @@ export function renderHtml() {
     '<nav id="blueprint-contents" aria-label="Community system blueprints"><h2>Community system build sheets</h2><ol>' +
     BUILD_SHEETS.map(b=>'<li><a href="#blueprint-'+escapeHtml(b.id)+'">'+escapeHtml(b.title)+'</a></li>').join("") +
     '</ol></nav>' + blueprintCards +
+    '<nav id="repair-contents" aria-label="Repair patterns"><h2>Repair and replacement patterns</h2><ol>' +
+    REPAIR_PATTERNS.map(p=>'<li><a href="#repair-'+escapeHtml(p.id)+'">'+escapeHtml(p.title)+'</a></li>').join("") +
+    '</ol></nav>' + repairCards +
     '<nav id="contents" aria-label="Field guide contents"><h2>Field guide contents</h2><ol>' + index + "</ol></nav>" +
     cards + '<footer><p>CodeBound contributors / MIT. Referenced third-party works retain their rights.</p></footer></body></html>\n';
 }
@@ -210,6 +236,24 @@ export function renderText() {
     section("SOURCES (ONLINE ONLY)",b.sources.map(id=>BUILD_SOURCES[id].title+": "+BUILD_SOURCES[id].url));
     lines.push("Starter station quantities are planning estimates, not population capacity or certification.","");
   }
+  lines.push("REPAIR PATTERN INDEX",...REPAIR_PATTERNS.map(p=>p.title),"");
+  for(const [i,p] of REPAIR_PATTERNS.entries()){
+    lines.push("=".repeat(72),"REPAIR PATTERN "+(i+1)+" / "+p.id,p.title.toUpperCase(),
+      "Scope: "+p.scope,"Review: "+p.review,p.summary,"",
+      "MEASURE: "+p.compatibility.measure,
+      "ONLY IF: "+p.compatibility.allowed,
+      "NOT IF: "+p.compatibility.forbidden,"");
+    section("TOOLS AND PARTS",p.parts);
+    section("PROCEDURE",p.steps);
+    section("ACCEPTANCE CHECKS",p.checks);
+    section("STOP AND QUARANTINE",p.stop);
+    section("MAINTENANCE",p.care);
+    lines.push("TEACH-BACK: "+p.teachBack,"");
+    section("RELATED FIELD GUIDES",p.guides.map(dependency));
+    section("SOURCES ONLINE ONLY",p.sources.map(id=>REPAIR_SOURCES[id].title+": "+REPAIR_SOURCES[id].url));
+    if(p.id==="printable-sign-holder")lines.push("OPENSCAD: examples/label-holder.scad within portable archive.","");
+    lines.push("Not certified. Physical fit does not prove rated strength.","");
+  }
   lines.push("FOUNDATIONAL FIELD GUIDES", "");
   for (const [i,g] of GUIDES.entries()) {
     lines.push("=".repeat(72), "FIELD " + (i+1) + " / " + g.id, g.title.toUpperCase(),
@@ -228,7 +272,7 @@ export function renderText() {
   return lines.join("\n") + "\n";
 }
 export function renderJson() {
-  return JSON.stringify({format:"codebound-fieldbook-v1",version:VERSION,warning:WARNING,sources:SOURCES,guides:GUIDES,responseSources:RESPONSE_SOURCES,responsePlans:RESPONSE_PLANS,workshopSources:WORKSHOP_SOURCES,workshopLessons:WORKSHOP_LESSONS,buildSources:BUILD_SOURCES,materialCatalog:MATERIALS,buildSheets:BUILD_SHEETS},null,2) + "\n";
+  return JSON.stringify({format:"codebound-fieldbook-v1",version:VERSION,warning:WARNING,sources:SOURCES,guides:GUIDES,responseSources:RESPONSE_SOURCES,responsePlans:RESPONSE_PLANS,workshopSources:WORKSHOP_SOURCES,workshopLessons:WORKSHOP_LESSONS,buildSources:BUILD_SOURCES,materialCatalog:MATERIALS,buildSheets:BUILD_SHEETS,repairPatterns:REPAIR_PATTERNS,repairSources:REPAIR_SOURCES},null,2) + "\n";
 }
 export const sha256 = bytes => createHash("sha256").update(bytes).digest("hex");
 function crc32(data) {
@@ -277,7 +321,8 @@ function kitReadme() {
   return "CODEBOUND PORTABLE KIT " + VERSION + "\n\n" +
     "OPEN fieldbook.html by double-clicking, without a server or network.\n" +
     "fieldbook.txt is plain text. fieldbook.json contains structured records.\n" +
-    "All formats include six 72-hour plans, five workshops, six system build sheets and sixteen field guides.\n" +
+    "All formats include six 72-hour plans, five workshops, six system build sheets, six repair patterns and sixteen field guides.\n" +
+    "The ZIP also includes examples/label-holder.scad and docs/REPAIR-WORKSHEET.txt.\n" +
     "site/ contains an offline-capable local HTTP server for the interactive web app.\n" +
     "From inside site/, run: node scripts/serve.mjs, then open http://localhost:4173.\n" +
     "Node.js 20+ is required for this interactive local server; fieldbook.html needs none.\n" +
