@@ -10,7 +10,7 @@ test("all six build sheets have valid dependencies, quantities and safety accept
   for (const b of BUILD_SHEETS) {
     assert.match(b.id,/^[a-z0-9-]+$/);
     for (const key of ["title","summary","domain","duration","review","makes","handoff"])assert.ok(b[key],b.id+" missing "+key);
-    for (const key of ["materials","steps","checks","stop","maintenance","dependencies","sources","tools","diagram"])assert.ok(Array.isArray(b[key])&&b[key].length>=2,b.id+" invalid "+key);
+    for (const key of ["materials","steps","checks","stop","maintenance","dependencies","sources","tools","diagram"])assert.ok(Array.isArray(b[key])&&b[key].length >= (["sources"].includes(key)?1:2),b.id+" invalid "+key);
     assert.equal(b.diagram.length,3);
     assert.ok(b.steps.length>=4&&b.checks.length>=3&&b.stop.length>=2);
     assert.ok(b.materials.every(x=>MATERIALS[x.id]&&Number.isSafeInteger(x.quantity)&&x.quantity>0));

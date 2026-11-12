@@ -114,3 +114,12 @@
 @media(max-width:930px){.blueprint-layout{grid-template-columns:1fr}.blueprint-planner{position:static}}
 @media(max-width:760px){.blueprint-section{padding:48px 18px}.blueprint-card{padding:18px}}
 @media print{.blueprint-section{display:none!important}.printing-blueprints .blueprint-print-only{display:block!important;white-space:pre-wrap;color:#000;font:12pt/1.45 ui-monospace,monospace;background:white;padding:30px}.printing-blueprints header,.printing-blueprints main,.printing-blueprints footer,.printing-blueprints dialog{display:none!important}}
+
+/* Correct printed checklist visibility: keep main visible and hide non-checklist content. */
+@media print{
+  .printing-blueprints main{display:block!important}
+  .printing-blueprints main > :not(.blueprint-section){display:none!important}
+  .printing-blueprints .blueprint-section{display:block!important;border:0!important;background:white!important;padding:0!important}
+  .printing-blueprints .blueprint-section > :not(.blueprint-print-only){display:none!important}
+  .printing-blueprints .blueprint-print-only{display:block!important;color:#000!important;background:#fff!important}
+}

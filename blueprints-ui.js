@@ -91,13 +91,14 @@ function updateSelection(input,id){
     byId("blueprint-message").textContent="Use a whole number from 0 to 25 per station design.";
     input.value=String(selections.get(id));return;
   }
+  const previous=selections.get(id);
   selections.set(id,n);
   try {
     getPlan();
     renderPlan();
     byId("blueprint-message").textContent="Starter quantities updated. Verify actual part compatibility and conditions before building.";
   } catch(error){
-    selections.set(id,0);input.value="0";
+    selections.set(id,previous);input.value=String(previous);
     byId("blueprint-message").textContent=error.message;
     renderPlan();
   }
