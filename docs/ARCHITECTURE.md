@@ -53,3 +53,11 @@ No remote synchronization or real-time verification is currently implemented. PW
 - `workshop-ui.js` renders native expandable lessons and stores optional practice marks only in browser localStorage. The JSON export includes only lesson IDs and practice timestamps, not names, locations or health details. A mark is not certification.
 - `scripts/build-field-kit.mjs` includes all workshop text, SVG and sources in standalone HTML, plain text and JSON, with no external runtime dependency.
 - `tests/workshops.test.js` verifies content completeness, cross-references, escaped diagrams and practice-log validation. Portable-kit tests check representation in every format.
+
+## v0.5 Reusable system build sheets
+
+- `data/blueprints.js` provides six independent station guides with BOM lines, safety stop conditions, verification, maintenance and source citations. Materials live in a canonical ID catalog so a planner can safely aggregate overlapping items.
+- `src/blueprint-core.js` validates whole station counts (max 25/design and 100 overall), calculates materials deterministically, emits human-readable print plans and CSV with spreadsheet formula injection protection. No pricing, capacity ratings or certification is implied.
+- `blueprints-ui.js` uses native `details`, number inputs, an accessible table and CSV/print controls. No local account or storage is required.
+- The static HTML, text and JSON fieldbooks embed all six sheets with quantities per one station. Online sources are referenced but not mirrored.
+- The ZIP includes the complete interactive calculator and source data for local HTTP use; `tests/blueprints.test.js` and extended portable-kit tests check all parts and cross-references.

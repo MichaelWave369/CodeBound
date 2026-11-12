@@ -19,7 +19,7 @@
       <span class="brand-stack"><strong>CODEBOUND</strong><small>THE COMMONS ATLAS</small></span>
     </a>
     <nav aria-label="Main navigation" class="main-nav">
-      <a href="#response">First 72 hours</a><a href="#workshop">Workshop</a><a href="#atlas">Field atlas</a><a href="#field-kit">Portable kit</a><a href="#workbench">Workbench</a><a href="#protocol">The protocol</a>
+      <a href="#response">First 72 hours</a><a href="#workshop">Workshop</a><a href="#blueprints">Build sheets</a><a href="#atlas">Field atlas</a><a href="#field-kit">Portable kit</a><a href="#workbench">Workbench</a><a href="#protocol">The protocol</a>
     </nav>
     <span class="network-pill" id="network-status" aria-live="polite">LOCAL FIRST</span>
   </header>
@@ -27,7 +27,7 @@
   <main id="main">
     <section class="hero" aria-labelledby="hero-title">
       <div class="hero-copy">
-        <div class="eyebrow"><span class="pulse-dot"></span> OPEN KNOWLEDGE SYSTEM / EDITION 0.4</div>
+        <div class="eyebrow"><span class="pulse-dot"></span> OPEN KNOWLEDGE SYSTEM / EDITION 0.5</div>
         <h1 id="hero-title">KNOWLEDGE<br>THAT <em>SURVIVES</em><br>THE NETWORK.</h1>
         <p>A field atlas for rebuilding the essentials. Water. Food. Shelter. Power. Communication. Community. No gatekeepers. No account. Practical instructions, verified where possible, with safety limits where it matters.</p>
         <div class="hero-actions">
@@ -107,6 +107,35 @@
       <p class="workshop-footnote">These are evidence-informed community drafts. See product instructions and professional guidance for hazardous work; stopping a dangerous activity is a successful lesson outcome.</p>
     </section>
 
+    <section class="blueprint-section" id="blueprints" aria-labelledby="blueprint-heading">
+      <div class="section-intro">
+        <span class="kicker">05 / REUSABLE COMMUNITY SYSTEMS</span>
+        <h2 id="blueprint-heading">Build one. Multiply carefully.</h2>
+        <p>Six independent starter-station plans with component lists, operating instructions, checks, stop conditions, maintenance and source guidance. Select quantities and combine materials. These are not engineering approvals or guaranteed capacity ratings.</p>
+      </div>
+      <div class="blueprint-layout">
+        <div id="blueprint-list" class="blueprint-list"></div>
+        <aside class="blueprint-planner" aria-labelledby="blueprint-planner-title">
+          <span class="kicker">LOCAL PLANNING / NO CLOUD</span>
+          <h3 id="blueprint-planner-title">Combined materials</h3>
+          <p>Choose station counts from the build sheets. Component quantities are aggregated by material ID. Check real-world compatibility, site limits and inventory before relying on the list.</p>
+          <strong id="blueprint-count" aria-live="polite">0 STARTER STATIONS</strong>
+          <div class="blueprint-table-scroll"><table class="blueprint-table">
+            <thead><tr><th scope="col">Component</th><th scope="col">Qty</th><th scope="col">Unit</th></tr></thead>
+            <tbody id="blueprint-bom"></tbody>
+          </table></div>
+          <div class="blueprint-plan-actions">
+            <button id="blueprint-export" type="button">Export CSV</button>
+            <button id="blueprint-print" type="button">Print checklist</button>
+          </div>
+          <p id="blueprint-message" role="status" aria-live="polite" class="blueprint-message"></p>
+          <p class="blueprint-disclaimer">Starter quantities do not define service capacity, safety certification or stocking requirements.</p>
+        </aside>
+      </div>
+      <pre id="blueprint-print-copy" class="blueprint-print-only"></pre>
+      <p class="blueprint-outro">All build sheets are embedded in the standalone fieldbook and portable ZIP. The interactive quantity calculator needs the local web app; each static fieldbook sheet includes a one-station bill of materials.</p>
+    </section>
+
     <section class="atlas-section" id="atlas" aria-labelledby="atlas-title">
       <div class="section-intro flex-heading"><div><span class="kicker">02 / THE FIELD ATLAS</span><h2 id="atlas-title">Open instructions. Real checks.</h2><p>Every card tells you what you need, what to do, how to check your work, and when to get expert help.</p></div><div class="atlas-count" id="results-count" role="status" aria-live="polite"></div></div>
       <div class="filter-bar">
@@ -170,6 +199,7 @@
   <script type="module" src="./app.js"></script>
   <script type="module" src="./scenarios-ui.js"></script>
   <script type="module" src="./workshop-ui.js"></script>
+  <script type="module" src="./blueprints-ui.js"></script>
   <noscript><p class="no-js">JavaScript is required for interactive filters and tools. The source instructions are available in data/guides.js and can be printed or preserved from the repository.</p></noscript>
 </body>
 </html>
