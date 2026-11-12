@@ -79,6 +79,8 @@ test("ZIP is deterministic, self-contained and its checksums match",async()=>{
     assert.equal(validatePreservationManifest(index,PRESERVATION_RECORDS),true);
     for(const file of index.files){
       assert.ok(files["site/"+file.path],"missing preserved asset "+file.path);
+      assert.ok(files[file.path],"missing USB-root asset "+file.path);
+      assert.deepEqual(files[file.path],files["site/"+file.path]);
       assert.equal(files["site/"+file.path].length,file.bytes);
       assert.equal(sha256(files["site/"+file.path]),file.sha256,"preserved asset changed: "+file.path);
     }
