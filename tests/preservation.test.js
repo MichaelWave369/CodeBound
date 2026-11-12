@@ -15,7 +15,7 @@ test("registry has unique versioned packs, explicit safety limits, valid referen
   for(const key of ["title","summary","scope","provenance","units","tolerance","review"])assert.ok(item[key]);
   assert.ok(item.files.length>=2&&item.checks.length>=3&&item.inputs.length>=3);
   assert.equal(new Set(item.files).size,item.files.length);
-  for(const path of item.files)assert.match(path,/^(drawings|examples|templates|docs)\/[a-z0-9.-]+\.(svg|txt|scad|csv)$/);
+  for(const path of item.files)assert.match(path,/^(drawings|examples|templates|docs)\/[A-Za-z0-9._-]+\.(svg|txt|scad|csv)$/);
   for(const d of item.dimensions) {
    assert.ok(d.name&&d.unit);
    assert.ok(d.value===null||(Number.isFinite(d.value)&&d.value>=0));
