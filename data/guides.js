@@ -8,7 +8,13 @@ export const SOURCES = {
   who_sanitation: { title: "WHO · Sanitation Safety Planning, 2nd edition", url: "https://www.who.int/publications/i/item/9789240062887" },
   food_safety: { title: "FoodSafety.gov · Food Safety in a Disaster", url: "https://www.foodsafety.gov/keep-food-safe/food-safety-in-disaster-or-emergency" },
   cdc_power: { title: "CDC · Safety During a Power Outage", url: "https://www.cdc.gov/natural-disasters/response/what-to-do-protect-yourself-during-a-power-outage.html" },
-  fema_kit: { title: "FEMA · Build an Emergency Kit", url: "https://www.fema.gov/print/pdf/node/503732" }
+  fema_kit: { title: "FEMA · Build an Emergency Kit", url: "https://www.fema.gov/print/pdf/node/503732" },
+  epa_fish: {"title":"EPA · Fish and shellfish consumption safety","url":"https://www.epa.gov/choose-fish-and-shellfish-wisely/should-i-be-concerned-about-eating-fish-and-shellfish"},
+  nccih_herbs: {"title":"NIH NCCIH · Dietary supplement safety and interactions","url":"https://www.nccih.nih.gov/health/tips/tips-what-consumers-need-to-know-about-dietary-supplements"},
+  nps_ten: {"title":"NPS · The Ten Essentials (shelter and navigation)","url":"https://www.nps.gov/articles/10essentials.htm"},
+  usgs_compass: {"title":"USGS · Finding Your Way with Map and Compass","url":"https://www.usgs.gov/educational-resources/finding-your-way-map-and-compass"},
+  fema_power: {"title":"FEMA · Hazard safety sheets including power outages","url":"https://www.ready.gov/sites/default/files/2025-02/fema_full-suite-hazard-info-sheets.pdf"},
+  umn_garden: {"title":"University of Minnesota Extension · Planting the vegetable garden (adapt locally)","url":"https://extension.umn.edu/planting-and-growing-guides/planting-vegetable-garden"}
 };
 
 export const GUIDES = [
@@ -155,8 +161,343 @@ export const GUIDES = [
     checks: ["Browse and search after disconnecting internet.", "Export a ledger snapshot and import it elsewhere.", "A printed water plan is legible without CSS or a network."],
     cautions: ["The included development server binds only to 127.0.0.1, not the LAN.", "Service workers need a supported browser and a secure origin except localhost; data is not automatically synchronized."],
     sources: [], depends: ["communications"], code: "npm test && npm run dev; the app has no remote runtime dependencies."
-  }
+  },
+  {
+    "id": "field-hunt-fish-harvest",
+    "title": "Field skill: hunt, fish, and responsibly harvest food",
+    "category": "food",
+    "phase": "Sustain",
+    "priority": 2,
+    "effort": "Practice over several sessions",
+    "review": "community-draft",
+    "summary": "Learn lawful, humane, sustainable food gathering, identification and food-safety decisions before relying on wild food.",
+    "materials": [
+      "Current local rules, licenses and closures",
+      "Notebook or printed species guide",
+      "Trusted local instructor",
+      "Handwashing and food-safe storage supplies"
+    ],
+    "steps": [
+      "Check hunting/fishing seasons, land access, harvest limits and protected species with the relevant local authority before going out.",
+      "Learn local fish and plant identification from a qualified guide; record uncertain species as DO NOT HARVEST or EAT.",
+      "For fish, check the latest waterbody- and species-specific consumption advisory before keeping food; do not assume clear water means safe fish.",
+      "Learn hygienic handling, temperature control and safe cooking from recognized food-safety guidance; log where each harvest came from.",
+      "Practice a conservation-first trip with a licensed mentor; record what was observed, released and safely harvested."
+    ],
+    "checks": [
+      "Current permissions, seasons and closures were checked",
+      "No unidentified plant, mushroom, fish or animal was consumed",
+      "Local fish advisories and food-handling steps were reviewed"
+    ],
+    "cautions": [
+      "Do not eat an unknown wild plant or mushroom; poisonous look-alikes can be deadly.",
+      "Fishing and hunting legality varies widely. This guide does not authorize taking wildlife, constructing traps or using weapons.",
+      "Some contaminants remain in fish even after cooking; obey consumption advisories."
+    ],
+    "sources": [
+      "epa_fish",
+      "food_safety"
+    ],
+    "depends": [
+      "food-hub",
+      "safe-water"
+    ],
+    "code": "Field log: date, location region, species confidence, permits/closures, advisory reviewed, outcome; no precise sensitive habitat coordinates in public exports."
+  },
+  {
+    "id": "field-purify-water",
+    "title": "Field skill: assess and treat emergency drinking water",
+    "category": "water",
+    "phase": "Stabilize",
+    "priority": 1,
+    "effort": "1 hour drill",
+    "review": "reference-backed",
+    "summary": "Choose safe source water first; distinguish biological contamination from chemical or radiological contamination.",
+    "materials": [
+      "CDC water guidance printed beforehand",
+      "Verified safe storage containers",
+      "Clean filter cloth",
+      "Pot/heat source or manufacturer-approved treatment product"
+    ],
+    "steps": [
+      "Check local boil-water, do-not-drink and do-not-use advisories; prioritize sealed bottled or verified safe water.",
+      "Reject any source suspected of containing fuel, pesticides, industrial chemicals or radioactive materials: basic boiling/disinfection cannot make it safe.",
+      "If cloudy but not chemically contaminated, allow settling and pour off or filter through clean cloth to remove particles before disinfection.",
+      "When boiling for germs, bring clear water to a rolling boil for 1 minute, or 3 minutes above 6,500 feet; let cool before handling.",
+      "If boiling is impossible, follow current CDC instructions and the label for a properly specified treatment product, recognizing that filters and chemicals do not remove every hazard.",
+      "Keep untreated and treated containers separate, sanitize storage and mark the treatment date."
+    ],
+    "checks": [
+      "The suspected hazard and advisory were recorded",
+      "Treatment time, method and elevation were checked against current CDC guidance",
+      "Clean capped containers are labeled and stored away from untreated water"
+    ],
+    "cautions": [
+      "A homemade sand/charcoal filter is not proof that water is drinkable.",
+      "Do not improvise treatment doses from memory or mix cleaning chemicals.",
+      "Use an alternate source for suspected toxic chemical or radiological contamination."
+    ],
+    "sources": [
+      "cdc_water",
+      "cdc_supply"
+    ],
+    "depends": [
+      "safe-water"
+    ],
+    "code": "Treatment log: source, advisory, contamination concern, method, duration, storage, reviewer; no automatic safe-to-drink certification."
+  },
+  {
+    "id": "field-natural-medicine-literacy",
+    "title": "Field skill: natural medicine literacy and evidence-first first aid",
+    "category": "health",
+    "phase": "Stabilize",
+    "priority": 1,
+    "effort": "Ongoing review",
+    "review": "reference-backed",
+    "summary": "Preserve traditional plant knowledge while separating documented evidence, interactions and unknowns from emergency medical treatment.",
+    "materials": [
+      "Standard first-aid reference and training",
+      "Clean first-aid kit",
+      "Medication and allergy information kept privately",
+      "Plant-identification references, not as permission to ingest"
+    ],
+    "steps": [
+      "Learn recognized first aid, hygiene, CPR and emergency calling procedures from a qualified training organization.",
+      "For each proposed herb or remedy, record exact species, part used, claim, evidence quality, known toxicity, interactions and publication date.",
+      "Check whether supplements can interact with prescription or over-the-counter medicines, pregnancy or underlying conditions before considering use with a clinician.",
+      "Keep potentially poisonous look-alikes and unsupported cure claims in a clearly marked DO NOT USE / NEEDS REVIEW section.",
+      "Practice safe bandaging and basic first-aid simulations with training materials, not experimental treatment on injured people."
+    ],
+    "checks": [
+      "Each claimed remedy carries an explicit evidence grade, not a blanket 'natural = safe' label",
+      "Danger signs and emergency referral routes are printed",
+      "No unverified herbal preparation is presented as a substitute for needed care"
+    ],
+    "cautions": [
+      "Natural does not mean safe; some herbs are toxic or alter medicine effectiveness.",
+      "Serious bleeding, breathing difficulty, stroke symptoms, severe infection or poisoning requires urgent professional help.",
+      "Do not use wild plants for ingestion, wound care or animal treatment without qualified identification and appropriate evidence."
+    ],
+    "sources": [
+      "nccih_herbs"
+    ],
+    "depends": [
+      "health-point",
+      "handwashing"
+    ],
+    "code": "Evidence card fields: species, proposed use, evidence level, contraindications, interactions, editor/reviewer and date."
+  },
+  {
+    "id": "field-build-shelter",
+    "title": "Field skill: choose and set up emergency shelter",
+    "category": "shelter",
+    "phase": "Stabilize",
+    "priority": 1,
+    "effort": "2-hour supervised practice",
+    "review": "reference-backed",
+    "summary": "Prioritize protection from weather, safe ground, ventilation and exits before improvising structures.",
+    "materials": [
+      "Weather information",
+      "Insulation layers and ground pad",
+      "Commercial tarp, tent or bivvy where available",
+      "Light, whistle and safe water"
+    ],
+    "steps": [
+      "Prefer a safe existing building or recognized shelter; avoid damaged structures and unstable trees.",
+      "For temporary outdoor shelter, choose permitted ground clear of flood channels, rockfall, dead branches and fast-moving water.",
+      "Use a commercial tarp or tent according to instructions, keep insulation between people and cold/wet ground, and provide adequate ventilation.",
+      "Keep cooking equipment, fires, fuel and generators outside occupied spaces and away from windows and openings.",
+      "Mark exits and a fallback location; practice taking down and packing the shelter in daylight."
+    ],
+    "checks": [
+      "The site is not in a flood path or below dead limbs",
+      "People can remain dry, warm/cool and able to exit",
+      "No combustion exhaust can enter the shelter"
+    ],
+    "cautions": [
+      "Do not enter or modify structurally damaged buildings without qualified assessment.",
+      "Generator exhaust and indoor combustion can cause fatal carbon-monoxide poisoning.",
+      "Local land-use rules, wildlife hazards and weather conditions can change rapidly."
+    ],
+    "sources": [
+      "nps_ten",
+      "fema_power"
+    ],
+    "depends": [
+      "shelter-safety",
+      "safe-water"
+    ],
+    "code": "Shelter check: forecast, land permission, ground hazards, dry-floor test, airflow, exits, responsible observer."
+  },
+  {
+    "id": "field-grow-garden",
+    "title": "Field skill: grow a food garden and save planting records",
+    "category": "food",
+    "phase": "Sustain",
+    "priority": 2,
+    "effort": "Several weeks to a season",
+    "review": "reference-backed",
+    "summary": "Make a small, repeatable food-growing system using clean soil, local planting dates and measured harvests.",
+    "materials": [
+      "Appropriate vegetable seed",
+      "Known-safe soil and containers or beds",
+      "Compost, mulch, tools and watering can",
+      "Plant labels and notebook"
+    ],
+    "steps": [
+      "Choose a sunny accessible site, confirm that soil is safe for food growing and identify a reliable source of irrigation.",
+      "Consult a local cooperative extension planting calendar rather than copying another climate's planting dates.",
+      "Choose a modest mix of regionally suitable crops; label sow date, seed variety, expected maturity and spacing.",
+      "Keep soil evenly moist as appropriate, monitor pests and use locally recommended integrated-pest-management practices.",
+      "Record actual germination, harvested food, water use and seeds saved to improve the next season."
+    ],
+    "checks": [
+      "There is a season-specific planting plan",
+      "The soil history and water source are understood",
+      "Records show observations and yield rather than assuming success"
+    ],
+    "cautions": [
+      "A garden takes time and is not an immediate substitute for stored food.",
+      "Avoid crops in suspected contaminated soil; do not rely on unidentified wild fertilizers or pesticides.",
+      "Crop dates in the linked Minnesota example are not universal: adapt locally."
+    ],
+    "sources": [
+      "umn_garden",
+      "cdc_water"
+    ],
+    "depends": [
+      "growing-food",
+      "safe-water"
+    ],
+    "code": "Garden CSV: crop, variety, planting date, season, soil check, irrigation, harvest, save-seed outcome."
+  },
+  {
+    "id": "field-create-power",
+    "title": "Field skill: calculate and safely supply small-scale backup power",
+    "category": "energy",
+    "phase": "Sustain",
+    "priority": 2,
+    "effort": "1-hour audit then supervised demo",
+    "review": "reference-backed",
+    "summary": "Start with lower demand, battery capacity and ready-made certified systems before attempting any electrical construction.",
+    "materials": [
+      "Device watt ratings and usage hours",
+      "Calculator and notebook",
+      "Certified portable power station or appropriate battery system",
+      "Recharge source and carbon monoxide alarm"
+    ],
+    "steps": [
+      "List critical loads such as lights, communication, refrigeration and necessary medical equipment; calculate watt-hours per day as watts multiplied by hours.",
+      "Compare the daily need against a power source's usable capacity, charge time and manufacturer load limits; include a reserve and realistic conversion losses.",
+      "Learn the roles of solar panel, charge controller, rated battery and inverter on a disconnected demonstration setup.",
+      "Use manufacturer-approved equipment with compatible connectors, correct protective devices and dry ventilation; ask a qualified electrician for permanent wiring.",
+      "Test a short simulated outage, document real runtime, and make a power-down priority list."
+    ],
+    "checks": [
+      "Every priority load has a watt-hour estimate",
+      "No overloaded cord or improvised mains connection is present",
+      "Runtime and recharge checks were recorded under safe conditions"
+    ],
+    "cautions": [
+      "Never backfeed a home outlet or improvise utility-panel wiring.",
+      "Operate fuel generators only outdoors at least 20 feet from building openings, following official carbon monoxide guidance.",
+      "Damaged lithium batteries, bad wiring, fuel heaters and hot equipment pose fire, shock and poisoning risks."
+    ],
+    "sources": [
+      "fema_power",
+      "cdc_power"
+    ],
+    "depends": [
+      "basic-light",
+      "communications"
+    ],
+    "code": "Energy worksheet: load watts × hours/day, battery nominal/usable Wh, efficiency assumptions, observed hours and recharge source."
+  },
+  {
+    "id": "field-personal-safety",
+    "title": "Field skill: self-defense through awareness, escape and de-escalation",
+    "category": "safety",
+    "phase": "Stabilize",
+    "priority": 1,
+    "effort": "30-minute drills",
+    "review": "community-draft",
+    "summary": "Protect life with prevention, clear boundaries, safe exits and nonviolent response before any physical confrontation.",
+    "materials": [
+      "Printed emergency contacts",
+      "Home/field exits marked on a sketch",
+      "Whistle, light and phone/radio if available",
+      "Trusted practice partner"
+    ],
+    "steps": [
+      "Identify situations and locations that make escape difficult; choose well-lit routes and avoid unnecessary confrontation.",
+      "Practice confident boundary-setting, staying at a safe distance and leaving early when threatened.",
+      "Set a simple check-in and meet-up plan with trusted people; agree on how to summon help if communications are unreliable.",
+      "Practice moving toward a safe exit and contacting emergency services; use legitimate, supervised first-aid and personal-safety training.",
+      "Review household doors, lights, alarms and animal transport routines to reduce preventable risk."
+    ],
+    "checks": [
+      "Two safe exits or retreat options are identified where available",
+      "The plan prioritizes getting away and seeking help",
+      "No plan depends on confronting strangers, setting traps or taking vigilante action"
+    ],
+    "cautions": [
+      "Do not escalate, pursue or retaliate; protecting life is more important than property.",
+      "This is not a fighting course or legal advice; local laws and safety conditions differ.",
+      "In an immediate threat, contact emergency services when possible."
+    ],
+    "sources": [
+      "nps_ten",
+      "fema_kit"
+    ],
+    "depends": [
+      "community-assessment",
+      "communications"
+    ],
+    "code": "Voluntary safety drill: scenario, early warning signs, safe exit, communications backup, follow-up; do not store personal victim profiles."
+  },
+  {
+    "id": "field-navigate",
+    "title": "Field skill: navigate without a network connection",
+    "category": "navigation",
+    "phase": "Sustain",
+    "priority": 2,
+    "effort": "1-hour outdoor practice",
+    "review": "reference-backed",
+    "summary": "Use a paper topo map, compass and planned checkpoints; treat GPS as a helpful backup rather than the only map.",
+    "materials": [
+      "Current paper topographic map",
+      "Baseplate compass",
+      "Pencil and waterproof note sheet",
+      "Downloaded offline map if available"
+    ],
+    "steps": [
+      "Before travel, mark start, destination, water, hazards, an alternate return route and a contact who knows the expected check-in.",
+      "Read map scale, contour lines and prominent terrain features; identify the legend and map north.",
+      "Orient map and compass, account for the map's magnetic declination, and take a bearing to a visible safe landmark.",
+      "Walk a short known route using terrain features and fixed checkpoints, then reverse it without relying on cell service.",
+      "Record errors and repeat in daylight until you can explain how to locate yourself and choose a safe return path."
+    ],
+    "checks": [
+      "You can orient the map and explain magnetic versus true north",
+      "You can identify two terrain landmarks and a return route",
+      "A paper route and contingency contact exist without internet access"
+    ],
+    "cautions": [
+      "Do not attempt high-risk terrain or unfamiliar backcountry solo as a first lesson.",
+      "Offline maps can be old; check closures, weather and access before travel.",
+      "Never depend on sun, stars or improvised methods alone when reliable navigation or rescue help is available."
+    ],
+    "sources": [
+      "usgs_compass",
+      "nps_ten"
+    ],
+    "depends": [
+      "communications",
+      "community-assessment"
+    ],
+    "code": "Route card: map edition, bearing/declination source, checkpoints, hazards, check-in plan, observed deviation."
+  },
 ];
 
-export const CATEGORIES = ["all", "water", "sanitation", "food", "shelter", "energy", "communications", "health", "repair", "education", "community", "code"];
+export const CATEGORIES = ["all", "water", "sanitation", "food", "shelter", "energy", "communications", "health", "repair", "education", "community", "code", "safety", "navigation"];
 export const PHASES = ["all", "Stabilize", "Sustain", "Rebuild"];
