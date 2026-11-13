@@ -25,7 +25,7 @@ test("ledger validates and safely imports records", () => {
   assert.throws(() => sanitizeLedgerImport({ items: [] }));
 });
 test("atlas guides are unique, coherent, and linked to valid sources", () => {
-  assert.equal(GUIDES.length, 16);
+  assert.equal(GUIDES.length, 24); // 16 original system cards + 8 field-skill cards
   const ids = new Set(GUIDES.map((g) => g.id));
   assert.equal(ids.size, GUIDES.length);
   for (const guide of GUIDES) {
